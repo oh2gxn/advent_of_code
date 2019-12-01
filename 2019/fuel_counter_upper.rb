@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
-#
+# frozen_string_literal: true
+
+##
 # Advent of Code / 2019 / Day 1
 #
 # @author oh2gxn
@@ -24,7 +26,8 @@ class RocketModule
     # could be done recursively, if you have enough stack, or tail recursion
     while residual > 0.0
       residual = fuel_to_mass(residual)
-      raise "This fuel weighs more than it is worth." if residual > @mass
+      raise 'This fuel weighs more than it is worth.' if residual >= @mass
+
       fuel += residual
     end
     fuel
@@ -40,11 +43,13 @@ class RocketModule
   end
 end
 
-# CLI for 1st day
-mass_col = 0
-fuel = 0.0
-ARGF.each do |line|
-  mass = Float(line.split(',')[mass_col].chomp) # TODO: CSV?
-  fuel += RocketModule.new(mass).fuel_required
+if __FILE__ == $PROGRAM_NAME
+  # CLI for the 1st day
+  mass_col = 0
+  fuel = 0.0
+  ARGF.each_line do |line|
+    mass = Float(line.split(',')[mass_col].chomp) # TODO: CSV?
+    fuel += RocketModule.new(mass).fuel_required
+  end
+  puts fuel
 end
-puts fuel

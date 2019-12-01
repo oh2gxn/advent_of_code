@@ -66,3 +66,10 @@ file:fuel_counter_upper.rb
 
 : ./fuel_counter_upper.rb day_1_input.csv
 5015983.0
+
+EDIT: using rbenv and bundler
+file:.ruby-version
+file:.ruby-gemset
+file:Gemfile
+: rbenv exec ruby fuel_counter_upper.rb day_1_input.csv
+5015983.0
