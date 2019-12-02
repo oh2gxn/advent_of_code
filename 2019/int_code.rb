@@ -62,7 +62,7 @@ class IntCode
       @ram[ptr3] = @ram[ptr1] * @ram[ptr2]
       return 4
     when HALT
-      return 0
+      return 0 # TODO: actually 1
     else
       return nil
     end
@@ -75,8 +75,21 @@ if __FILE__ == $PROGRAM_NAME
     puts "Usage: $PROGRAM_NAME file.csv"
     return 1
   end
-  CSV.foreach(ARGV[0]) do |row|
-    vm = IntCode.new(row)
-    puts vm.run(0)
+  param1 = nil
+  param1 = ARGV[1] if ARGV.length > 1
+  param2 = nil
+  param2 = ARGV[2] if ARGV.length > 2
+
+  # TODO: clean up this mess
+  (0..99).each do |x|
+    (0..99).each do |y|
+      CSV.foreach(ARGV[0]) do |row|
+        row[1] = x
+        row[2] = y
+        vm = IntCode.new(row)
+        res = vm.run(0)
+        puts "#{x}.#{y} => #{res}"
+      end
+    end
   end
 end

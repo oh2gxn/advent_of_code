@@ -119,3 +119,9 @@ program (your puzzle input) - in other words, don't reuse memory from a previous
 Find the input noun and verb that cause the program to produce the output 19690720. What is 100 *
 noun + verb? (For example, if noun=12 and verb=2, the answer would be 1202.)
 
+file:int_code.rb
+: rbenv exec ruby int_code.rb day_2_input.csv 12 2
+6730673
+
+: rbenv exec ruby int_code.rb day_2_input.csv | grep 19690720
+37.49 => 19690720
