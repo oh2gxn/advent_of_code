@@ -55,3 +55,103 @@ What is the Manhattan distance from the central port to the closest intersection
 
 file:crossed_wire.rb
 file:spec/crossed_wire_spec.rb
+
+Using RVM for a change
+: rvm install "ruby-2.4.0"
+Install of ruby-2.4.0 - #complete 
+Please be aware that you just installed a ruby that requires 2 patches just to be compiled on an up to date linux system.
+This may have known and unaccounted for security vulnerabilities.
+Please consider upgrading to ruby-2.6.3 which will have all of the latest security patches.
+
+: cd .
+ruby-2.4.0 - #gemset created /Users/janne/.rvm/gems/ruby-2.4.0@aoc
+ruby-2.4.0 - #generating aoc wrappers.........
+Using /Users/janne/.rvm/gems/ruby-2.4.0 with gemset aoc
+: gem install bundler
+Fetching bundler-2.0.2.gem
+Successfully installed bundler-2.0.2
+Parsing documentation for bundler-2.0.2
+Installing ri documentation for bundler-2.0.2
+Done installing documentation for bundler after 5 seconds
+1 gem installed
+: bundle install
+...
+Bundle complete! 2 Gemfile dependencies, 15 gems now installed.
+
+: bundle exec rspec
+........
+
+Finished in 0.00458 seconds (files took 0.11848 seconds to load)
+8 examples, 0 failures
+
+: bundle exec ruby crossed_wire.rb day_3_input.csv 
+[[225, 0], [538, 16], [538, 24], [-628, 2], [347, 347], [80, 627], [721, 16], [721, 24], [80, 694], [-571, 268], [538, 318], [-571, 326], [938, 16], [638, 318], [789, 192], [-102, 883], [-478, 514], [938, 77], [1009, 16], [835, 192], [721, 318], [638, 435], [789, 286], [835, 286], [789, 370], [638, 540], [835, 370], [963, 286], [835, 591], [1010, 435], [1138, 370], [1138, 384], [-1397, -218], [-1545, -161], [1426, 302], [1010, 804], [-1610, 247], [1139, 804], [1141, 804], [1672, 342], [1321, 804], [1672, 804], [-2229, 932], [-2738, 975], [-2738, 1295], [-2383, 1665]]
+
+So, the answer is (225+0)=225, although the naive solution spent
+enormous amount of time computing it.
+
+After adding a break in the inner loop:
+: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_3_input.csv 
+L1:[[225, 0], [538, 16], [538, 24], [-628, 2], [347, 347], [80, 627], [721, 16], [721, 24], [80, 694], [-571, 268], [538, 318], [-571, 326], [938, 16], [638, 318], [789, 192], [-102, 883], [-478, 514], [938, 77], [1009, 16], [835, 192], [721, 318], [638, 435], [789, 286], [835, 286], [789, 370], [638, 540], [835, 370], [963, 286], [835, 591], [1010, 435], [1138, 370], [1138, 384], [-1397, -218], [-1545, -161], [1426, 302], [1010, 804], [-1610, 247], [1139, 804], [1141, 804], [1672, 342], [1321, 804], [1672, 804], [-2229, 932], [-2738, 975], [-2738, 1295], [-2383, 1665]]
+
+     1543.71 real      1507.72 user         3.61 sys
+  35475456  maximum resident set size
+         0  average shared memory size
+         0  average unshared data size
+         0  average unshared stack size
+     15345  page reclaims
+       521  page faults
+         0  swaps
+         0  block input operations
+         0  block output operations
+         0  messages sent
+         0  messages received
+         0  signals received
+       432  voluntary context switches
+    614052  involuntary context switches
+
+That's about half an hour.
+
+* Part Two
+
+It turns out that this circuit is very timing-sensitive; you actually
+need to minimize the signal delay.
+
+To do this, calculate the number of steps each wire takes to reach
+each intersection; choose the intersection where the sum of both
+wires' steps is lowest. If a wire visits a position on the grid
+multiple times, use the steps value from the first time it visits that
+position when calculating the total value of a specific intersection.
+
+The number of steps a wire takes is the total number of grid squares
+the wire has entered to get to that location, including the
+intersection being considered. Again consider the example from above:
+
+...........
+.+-----+...
+.|.....|...
+.|..+--X-+.
+.|..|..|.|.
+.|.-X--+.|.
+.|..|....|.
+.|.......|.
+.o-------+.
+...........
+
+In the above example, the intersection closest to the central port is
+reached after 8+5+5+2 = 20 steps by the first wire and 7+6+4+3 = 20
+steps by the second wire for a total of 20+20 = 40 steps.
+
+However, the top-right intersection is better: the first wire takes
+only 8+5+2 = 15 and the second wire takes only 7+6+2 = 15, a total of
+15+15 = 30 steps.
+
+Here are the best steps for the extra examples from above:
+- R75,D30,R83,U83,L12,D49,R71,U7,L72
+  U62,R66,U55,R34,D71,R55,D58,R83 = 610 steps
+- R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
+  U98,R91,D20,R16,D67,R40,U7,R15,U6,R7 = 410 steps
+
+What is the fewest combined steps the wires must take to reach an
+intersection?
+
