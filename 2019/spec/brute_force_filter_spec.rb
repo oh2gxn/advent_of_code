@@ -16,6 +16,16 @@ RSpec.describe BruteForceFilter do
       it { is_expected.to be false }
     end
 
+    context 'given password 112233' do
+      let :password { '112233' }
+      it { is_expected.to be true }
+    end
+
+    context 'given password 123444' do
+      let :password { '123444' }
+      it { is_expected.to be false }
+    end
+
     context 'given password 355666' do
       let :password { '355666' }
       it { is_expected.to be true }

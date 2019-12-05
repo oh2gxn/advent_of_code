@@ -5,10 +5,9 @@ require:
 
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
   Include:
     - '*.rb'
-    - 'spec/*.rb'
   Exclude:
     - 'Gemfile'
 Layout/ConditionPosition:

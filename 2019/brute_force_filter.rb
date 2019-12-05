@@ -8,23 +8,14 @@
 
 # A validator for password rules
 module BruteForceFilter
-
-  MIN = 353096
-
-  MAX = 843212
-
   # @param password [String] a candidate
   # @return [Boolean] whether valid or not
   def self.valid?(password)
-    return false unless password =~ /^\d{6}$/
-
-    return false unless password.to_i >= MIN
-
-    return false unless password.to_i <= MAX
+    return false unless password.match?(/^\d{6}$/)
 
     return false unless BruteForceFilter.non_decreasing?(password)
 
-    return false unless BruteForceFilter.has_one_double_digit?(password)
+    return false unless BruteForceFilter.one_double_digit?(password)
 
     true
   end
@@ -36,6 +27,7 @@ module BruteForceFilter
     password.each_char do |c|
       i = c.to_i
       return false if i < max
+
       max = [max, i].max
     end
     true
@@ -43,7 +35,7 @@ module BruteForceFilter
 
   # @param password [String] a candidate
   # @return [Boolean] whether valid or not
-  def self.has_one_double_digit?(password)
+  def self.one_double_digit?(password)
     found_doubles = []
     digit = nil
     streak = 1

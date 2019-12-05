@@ -8,6 +8,7 @@
 
 # A module of our rocket
 class RocketModule
+
   # Mass of the module
   attr_accessor :mass
 
@@ -26,7 +27,7 @@ class RocketModule
     # could be done recursively, if you have enough stack, or tail recursion
     while residual > 0.0
       residual = fuel_to_mass(residual)
-      raise 'This fuel weighs more than it is worth.' if residual >= @mass
+      raise StandardError 'This fuel weighs more than it is worth.' if residual >= @mass
 
       fuel += residual
     end
@@ -41,9 +42,10 @@ class RocketModule
   def fuel_to_mass(mass)
     [0.0, (mass / 3.0).floor - 2.0].max
   end
+
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   # CLI for the 1st day
   mass_col = 0
   fuel = 0.0
