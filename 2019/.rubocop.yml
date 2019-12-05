@@ -1,0 +1,248 @@
+# Load the rubocop-rspec gem
+require:
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3
+  Include:
+    - '*.rb'
+    - 'spec/*.rb'
+  Exclude:
+    - 'Gemfile'
+Layout/ConditionPosition:
+  Enabled: true
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+  EnforcedStyle: empty_lines
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented_relative_to_receiver
+Lint/AmbiguousBlockAssociation:
+  Enabled: true
+Lint/AmbiguousOperator:
+  Enabled: true
+Lint/AmbiguousRegexpLiteral:
+  Enabled: true
+Lint/AssignmentInCondition:
+  Enabled: true
+  AllowSafeAssignment: true
+Lint/BooleanSymbol:
+  Enabled: true
+Lint/CircularArgumentReference:
+  Enabled: true
+Lint/Debugger:
+  Enabled: true
+Lint/DuplicateCaseCondition:
+  Enabled: true
+Lint/DuplicateMethods:
+  Enabled: true
+Lint/DuplicateHashKey:
+  Enabled: true
+Lint/EachWithObjectArgument:
+  Enabled: true
+Lint/ElseLayout:
+  Enabled: true
+Lint/EnsureReturn:
+  Enabled: true
+Lint/FormatParameterMismatch:
+  Enabled: true
+Lint/SuppressedException:
+  Enabled: true
+Lint/IneffectiveAccessModifier:
+  Enabled: true
+Lint/LiteralInInterpolation:
+  Enabled: true
+Lint/Loop:
+  Enabled: true
+Lint/NestedMethodDefinition:
+  Enabled: true
+Lint/NextWithoutAccumulator:
+  Enabled: true
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: true
+Lint/RequireParentheses:
+  Enabled: true
+Lint/ShadowedException:
+  Enabled: true
+Lint/ShadowingOuterLocalVariable:
+  Enabled: true
+Lint/UnderscorePrefixedVariableName:
+  Enabled: true
+Lint/UnreachableCode:
+  Enabled: true
+Lint/UselessAccessModifier:
+  Enabled: true
+Lint/UselessAssignment:
+  Enabled: true
+Lint/UselessComparison:
+  Enabled: true
+Lint/UselessSetterCall:
+  Enabled: true
+Lint/Void:
+  Enabled: true
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - spec/**/*.rb
+    - app/open_api/**/*.rb
+Metrics/BlockLength:
+  Max: 80
+  ExcludedMethods:
+    - describe
+    - context
+  Exclude:
+    - spec/**/*.rb
+    - Rakefile
+    - tmp/**/*
+    - app/open_api/**/*.rb
+Metrics/ClassLength:
+  Enabled: true
+  Max: 200
+  CountComments: false
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 10
+Metrics/LineLength:
+  Enabled: true
+  Max: 120
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
+  Exclude:
+    - features/**/*
+    - lib/**/*
+    - Rakefile
+    - script/**/*
+    - spec/**/*
+    - config/**/*
+Metrics/MethodLength:
+  Max: 32
+  Exclude:
+    - spec/**/*.rb
+    - app/open_api/**/*.rb
+Metrics/ModuleLength:
+  Max: 100
+  Exclude:
+    - app/open_api/**/*.rb
+    - lib/aux.rb
+Metrics/ParameterLists:
+  Enabled: true
+  Max: 4
+  CountKeywordArgs: true
+Metrics/PerceivedComplexity:
+  Enabled: true
+  Max: 10
+Naming/AccessorMethodName:
+  Enabled: true
+Naming/ClassAndModuleCamelCase:
+  Enabled: true
+Naming/ConstantName:
+  Enabled: true
+Naming/HeredocDelimiterCase:
+  Enabled: true
+  EnforcedStyle: uppercase
+Naming/HeredocDelimiterNaming:
+  Enabled: true
+  ForbiddenDelimiters:
+    - END
+    - (?-mix:EO[A-Z]{1})
+Naming/MethodName:
+  Enabled: true
+  EnforcedStyle: snake_case
+Naming/VariableName:
+  Enabled: true
+  EnforcedStyle: snake_case
+#RSpec/ExampleLength:
+#  Enabled: false
+#RSpec/InstanceVariable:
+#  Enabled: false
+#RSpec/NestedGroups:
+#  Enabled: true
+#  Max: 10
+Security/Eval:
+  Exclude:
+    - spec/**/*.rb
+Security/MarshalLoad:
+  Enabled: true
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+Style/AndOr:
+  Enabled: true
+  EnforcedStyle: always
+Style/AutoResourceCleanup:
+  Enabled: true
+Style/BracesAroundHashParameters:
+  Enabled: false
+Style/CaseEquality:
+  Enabled: true
+Style/ClassAndModuleChildren:
+  Enabled: true
+Style/ClassVars:
+  Enabled: true
+Style/ConditionalAssignment:
+  Enabled: true
+  EnforcedStyle: assign_to_condition
+Style/Documentation:
+  Enabled: false
+  Exclude:
+    - spec/**/*
+Style/DocumentationMethod:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+  RequireForNonPublicMethods: true
+Style/DoubleNegation:
+  Enabled: true
+Style/EndBlock:
+  Enabled: true
+Lint/FlipFlop:
+  Enabled: true
+Style/For:
+  Enabled: true
+  EnforcedStyle: each
+Style/FormatStringToken:
+  Enabled: true
+  EnforcedStyle: template
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+Style/GlobalVars:
+  Exclude:
+    - spec/**/*.rb
+Style/GuardClause:
+  Enabled: true
+  MinBodyLength: 1
+Style/IdenticalConditionalBranches:
+  Enabled: true
+Style/IfUnlessModifierOfIfUnless:
+  Enabled: true
+Style/ImplicitRuntimeError:
+  Enabled: true
+Style/Lambda:
+  EnforcedStyle: lambda
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+Style/MethodMissingSuper:
+  Enabled: true
+Style/MissingRespondToMissing:
+  Enabled: true
+Style/MultilineBlockChain:
+  Enabled: true
+Style/MultilineTernaryOperator:
+  Enabled: true
+Style/MultipleComparison:
+  Enabled: true
+Style/NestedTernaryOperator:
+  Enabled: true
+Style/OptionalArguments:
+  Enabled: true
+Style/Send:
+  Enabled: true
+Style/StructInheritance:
+  Enabled: true

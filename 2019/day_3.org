@@ -155,3 +155,240 @@ Here are the best steps for the extra examples from above:
 What is the fewest combined steps the wires must take to reach an
 intersection?
 
+file:crossed_wire.rb
+file:spec/crossed_wire_spec.rb
+
+: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_3_input.csv 
+L1:[{:cost=>225, :point=>[225, 0]}, {:cost=>554, :point=>[538, 16]}, {:cost=>562, :point=>[538, 24]}, {:cost=>630, :point=>[-628, 2]}, {:cost=>694, :point=>[347, 347]}, {:cost=>707, :point=>[80, 627]}, {:cost=>737, :point=>[721, 16]}, {:cost=>745, :point=>[721, 24]}, {:cost=>774, :point=>[80, 694]}, {:cost=>839, :point=>[-571, 268]}, {:cost=>856, :point=>[538, 318]}, {:cost=>897, :point=>[-571, 326]}, {:cost=>954, :point=>[938, 16]}, {:cost=>956, :point=>[638, 318]}, {:cost=>981, :point=>[789, 192]}, {:cost=>985, :point=>[-102, 883]}, {:cost=>992, :point=>[-478, 514]}, {:cost=>1015, :point=>[938, 77]}, {:cost=>1025, :point=>[1009, 16]}, {:cost=>1027, :point=>[835, 192]}, {:cost=>1039, :point=>[721, 318]}, {:cost=>1073, :point=>[638, 435]}, {:cost=>1075, :point=>[789, 286]}, {:cost=>1121, :point=>[835, 286]}, {:cost=>1159, :point=>[789, 370]}, {:cost=>1178, :point=>[638, 540]}, {:cost=>1205, :point=>[835, 370]}, {:cost=>1249, :point=>[963, 286]}, {:cost=>1426, :point=>[835, 591]}, {:cost=>1445, :point=>[1010, 435]}, {:cost=>1508, :point=>[1138, 370]}, {:cost=>1522, :point=>[1138, 384]}, {:cost=>1615, :point=>[-1397, -218]}, {:cost=>1706, :point=>[-1545, -161]}, {:cost=>1728, :point=>[1426, 302]}, {:cost=>1814, :point=>[1010, 804]}, {:cost=>1857, :point=>[-1610, 247]}, {:cost=>1943, :point=>[1139, 804]}, {:cost=>1945, :point=>[1141, 804]}, {:cost=>2014, :point=>[1672, 342]}, {:cost=>2125, :point=>[1321, 804]}, {:cost=>2476, :point=>[1672, 804]}, {:cost=>3161, :point=>[-2229, 932]}, {:cost=>3713, :point=>[-2738, 975]}, {:cost=>4033, :point=>[-2738, 1295]}, {:cost=>4048, :point=>[-2383, 1665]}]
+L8:[{:cost=>35195, :point=>[789, 286]}, 
+    {:cost=>36005, :point=>[638, 540]}, 
+    {:cost=>41563, :point=>[538, 24]}, 
+    {:cost=>42757, :point=>[789, 370]}, 
+    {:cost=>47999, :point=>[-1397, -218]}, 
+    {:cost=>47999, :point=>[-1545, -161]}, 
+    {:cost=>49643, :point=>[-1610, 247]}, 
+    {:cost=>50005, :point=>[-102, 883]}, 
+    {:cost=>50005, :point=>[80, 694]}, 
+    {:cost=>51053, :point=>[80, 627]}, 
+    {:cost=>51497, :point=>[721, 24]}, 
+    {:cost=>52251, :point=>[-2229, 932]}, 
+    {:cost=>52699, :point=>[789, 192]}, 
+    {:cost=>53063, :point=>[-571, 326]}, 
+    {:cost=>53765, :point=>[-2738, 975]}, 
+    {:cost=>56621, :point=>[-2383, 1665]}, 
+    {:cost=>56621, :point=>[-2738, 1295]},
+    {:cost=>56939, :point=>[-478, 514]},
+    {:cost=>57617, :point=>[-571, 268]},
+    {:cost=>58263, :point=>[-628, 2]},
+    {:cost=>79383, :point=>[1426, 302]},
+    {:cost=>79955, :point=>[1672, 342]},
+    {:cost=>90437, :point=>[835, 286]},
+    {:cost=>90855, :point=>[963, 286]},
+    {:cost=>91569, :point=>[638, 318]},
+    {:cost=>91765, :point=>[1010, 804]},
+    {:cost=>92385, :point=>[638, 435]},
+    {:cost=>92605, :point=>[1321, 804]},
+    {:cost=>92643, :point=>[225, 0]},
+    {:cost=>92643, :point=>[1009, 16]},
+    {:cost=>93343, :point=>[1141, 804]},
+    {:cost=>94801, :point=>[1010, 435]},
+    {:cost=>95159, :point=>[1138, 384]},
+    {:cost=>97923, :point=>[835, 370]},
+    {:cost=>98059, :point=>[1672, 804]},
+    {:cost=>98661, :point=>[538, 318]},
+    {:cost=>100477, :point=>[1138, 370]},
+    {:cost=>100477, :point=>[538, 16]},
+    {:cost=>101155, :point=>[1139, 804]},
+    {:cost=>102189, :point=>[835, 591]},
+    {:cost=>107641, :point=>[347, 347]},
+    {:cost=>107641, :point=>[721, 318]},
+    {:cost=>108129, :point=>[938, 77]},
+    {:cost=>108129, :point=>[835, 192]},
+    {:cost=>110061, :point=>[721, 16]},
+    {:cost=>110477, :point=>[938, 16]}]
+
+     6785.92 real      3795.05 user         5.10 sys
+  40681472  maximum resident set size
+         0  average shared memory size
+         0  average unshared data size
+         0  average unshared stack size
+     17147  page reclaims
+       520  page faults
+         0  swaps
+         0  block input operations
+         0  block output operations
+         0  messages sent
+         0  messages received
+         0  signals received
+       483  voluntary context switches
+    711382  involuntary context switches
+
+35195?
+That's not right.
+- sorting by cost works
+- calculating cost is BS?
+
+More specs:
+: bundle exec rspec
+...........F.F............
+
+Failures:
+
+  1) CrossedWire#path_crossings with the graphic example evaluates cost 40 for the crossing at [3,3]
+     Failure/Error: expect(crossing[:cost]).to eq(40)
+     
+       expected: 40
+            got: 41
+     
+       (compared using ==)
+     # ./spec/crossed_wire_spec.rb:92:in `block (4 levels) in <top (required)>'
+
+  2) CrossedWire#path_crossings with the graphic example evaluates cost 30 for the crossing at [6,5]
+     Failure/Error: expect(crossing[:cost]).to eq(30)
+     
+       expected: 30
+            got: 31
+     
+       (compared using ==)
+     # ./spec/crossed_wire_spec.rb:103:in `block (4 levels) in <top (required)>'
+
+Finished in 0.27696 seconds (files took 0.14658 seconds to load)
+26 examples, 2 failures
+
+Failed examples:
+
+rspec ./spec/crossed_wire_spec.rb:88 # CrossedWire#path_crossings with the graphic example evaluates cost 40 for the crossing at [3,3]
+rspec ./spec/crossed_wire_spec.rb:99 # CrossedWire#path_crossings with the graphic example evaluates cost 30 for the crossing at [6,5]
+
+Legendary off-by-one bug:
+: bundle exec rspec
+..........................
+
+Finished in 0.25278 seconds (files took 0.12558 seconds to load)
+26 examples, 0 failures
+
+: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_3_input.csv
+L1:[{:cost=>225, :point=>[225, 0]},
+    {:cost=>554, :point=>[538, 16]},
+    {:cost=>562, :point=>[538, 24]},
+    {:cost=>630, :point=>[-628, 2]},
+    {:cost=>694, :point=>[347, 347]},
+    {:cost=>707, :point=>[80, 627]},
+    {:cost=>737, :point=>[721, 16]},
+    {:cost=>745, :point=>[721, 24]},
+    {:cost=>774, :point=>[80, 694]},
+    {:cost=>839, :point=>[-571, 268]},
+    {:cost=>856, :point=>[538, 318]},
+    {:cost=>897, :point=>[-571, 326]},
+    {:cost=>954, :point=>[938, 16]},
+    {:cost=>956, :point=>[638, 318]},
+    {:cost=>981, :point=>[789, 192]},
+    {:cost=>985, :point=>[-102, 883]},
+    {:cost=>992, :point=>[-478, 514]},
+    {:cost=>1015, :point=>[938, 77]},
+    {:cost=>1025, :point=>[1009, 16]},
+    {:cost=>1027, :point=>[835, 192]},
+    {:cost=>1039, :point=>[721, 318]},
+    {:cost=>1073, :point=>[638, 435]},
+    {:cost=>1075, :point=>[789, 286]},
+    {:cost=>1121, :point=>[835, 286]},
+    {:cost=>1159, :point=>[789, 370]},
+    {:cost=>1178, :point=>[638, 540]},
+    {:cost=>1205, :point=>[835, 370]},
+    {:cost=>1249, :point=>[963, 286]},
+    {:cost=>1426, :point=>[835, 591]},
+    {:cost=>1445, :point=>[1010, 435]},
+    {:cost=>1508, :point=>[1138, 370]},
+    {:cost=>1522, :point=>[1138, 384]},
+    {:cost=>1615, :point=>[-1397, -218]},
+    {:cost=>1706, :point=>[-1545, -161]},
+    {:cost=>1728, :point=>[1426, 302]},
+    {:cost=>1814, :point=>[1010, 804]},
+    {:cost=>1857, :point=>[-1610, 247]},
+    {:cost=>1943, :point=>[1139, 804]},
+    {:cost=>1945, :point=>[1141, 804]},
+    {:cost=>2014, :point=>[1672, 342]},
+    {:cost=>2125, :point=>[1321, 804]},
+    {:cost=>2476, :point=>[1672, 804]},
+    {:cost=>3161, :point=>[-2229, 932]},
+    {:cost=>3713, :point=>[-2738, 975]},
+    {:cost=>4033, :point=>[-2738, 1295]},
+    {:cost=>4048, :point=>[-2383, 1665]}]
+L8:[{:cost=>35194, :point=>[789, 286]},
+    {:cost=>36004, :point=>[638, 540]},
+    {:cost=>41562, :point=>[538, 24]},
+    {:cost=>42756, :point=>[789, 370]},
+    {:cost=>47998, :point=>[-1397, -218]},
+    {:cost=>47998, :point=>[-1545, -161]},
+    {:cost=>49642, :point=>[-1610, 247]},
+    {:cost=>50004, :point=>[-102, 883]},
+    {:cost=>50004, :point=>[80, 694]},
+    {:cost=>51052, :point=>[80, 627]},
+    {:cost=>51496, :point=>[721, 24]},
+    {:cost=>52250, :point=>[-2229, 932]},
+    {:cost=>52698, :point=>[789, 192]},
+    {:cost=>53062, :point=>[-571, 326]},
+    {:cost=>53764, :point=>[-2738, 975]},
+    {:cost=>56620, :point=>[-2383, 1665]},
+    {:cost=>56620, :point=>[-2738, 1295]},
+    {:cost=>56938, :point=>[-478, 514]},
+    {:cost=>57616, :point=>[-571, 268]},
+    {:cost=>58262, :point=>[-628, 2]},
+    {:cost=>79382, :point=>[1426, 302]},
+    {:cost=>79954, :point=>[1672, 342]},
+    {:cost=>90436, :point=>[835, 286]},
+    {:cost=>90854, :point=>[963, 286]},
+    {:cost=>91568, :point=>[638, 318]},
+    {:cost=>91764, :point=>[1010, 804]},
+    {:cost=>92384, :point=>[638, 435]},
+    {:cost=>92604, :point=>[1321, 804]},
+    {:cost=>92642, :point=>[225, 0]},
+    {:cost=>92642, :point=>[1009, 16]},
+    {:cost=>93342, :point=>[1141, 804]},
+    {:cost=>94800, :point=>[1010, 435]},
+    {:cost=>95158, :point=>[1138, 384]},
+    {:cost=>97922, :point=>[835, 370]},
+    {:cost=>98058, :point=>[1672, 804]},
+    {:cost=>98660, :point=>[538, 318]},
+    {:cost=>100476, :point=>[1138, 370]},
+    {:cost=>100476, :point=>[538, 16]},
+    {:cost=>101154, :point=>[1139, 804]},
+    {:cost=>102188, :point=>[835, 591]},
+    {:cost=>107640, :point=>[347, 347]},
+    {:cost=>107640, :point=>[721, 318]},
+    {:cost=>108128, :point=>[938, 77]},
+    {:cost=>108128, :point=>[835, 192]},
+    {:cost=>110060, :point=>[721, 16]},
+    {:cost=>110476, :point=>[938, 16]}]
+
+     6247.94 real      6052.24 user        17.99 sys
+  35647488  maximum resident set size
+         0  average shared memory size
+         0  average unshared data size
+         0  average unshared stack size
+     18730  page reclaims
+       522  page faults
+         0  swaps
+         0  block input operations
+         0  block output operations
+         0  messages sent
+         0  messages received
+         0  signals received
+       443  voluntary context switches
+   3257926  involuntary context switches
+
+35194 was correct :D
+
+Check some rubocop:
+file:.rubocop.yml
+file:Gemfile
+
+: bundle install
+...
+Fetching rubocop-performance 1.5.1
+Installing rubocop-performance 1.5.1
+Bundle complete! 3 Gemfile dependencies, 16 gems now installed.
+
+: git add .rubocop.yml
+: git add -u
+: 
