@@ -22,9 +22,9 @@ module BruteForceFilter
 
     return false unless password.to_i <= MAX
 
-    return false unless password =~ /00|11|22|33|44|55|66|77|88|99/
-
     return false unless BruteForceFilter.non_decreasing?(password)
+
+    return false unless BruteForceFilter.has_one_double_digit?(password)
 
     true
   end
@@ -39,6 +39,30 @@ module BruteForceFilter
       max = [max, i].max
     end
     true
+  end
+
+  # @param password [String] a candidate
+  # @return [Boolean] whether valid or not
+  def self.has_one_double_digit?(password)
+    found_doubles = []
+    digit = nil
+    streak = 1
+    password.each_char do |c|
+      i = c.to_i
+      unless digit.nil?
+        if digit == i
+          streak += 1
+        else
+          # streak ends due to another digit?
+          found_doubles << digit if streak == 2
+          streak = 1
+        end
+      end
+      digit = i
+    end
+    # streak ends due to end of string?
+    found_doubles << digit if streak == 2
+    !found_doubles.empty?
   end
 end
 

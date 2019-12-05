@@ -25,7 +25,7 @@ file:brute_force_filter.rb
 file:spec/brute_force_filter_spec.rb
 
 : seq 353096 843212 | ./brute_force_filter.rb | wc -l
-     579
+579
 
 : git add brute_force_filter.rb day_4.org
 : git commit -m'2019 day 4, part 1'
@@ -49,3 +49,5 @@ input meet all of the criteria?
 
 Your puzzle input is still 353096-843212.
 
+: seq 353096 843212 | ./brute_force_filter.rb | wc -l
+358
