@@ -22,6 +22,7 @@ Your puzzle input is 353096-843212.
 
 If not plain seq + grep -P, use Ruby?
 file:brute_force_filter.rb
+file:spec/brute_force_filter_spec.rb
 
 : seq 353096 843212 | ./brute_force_filter.rb | wc -l
      579
