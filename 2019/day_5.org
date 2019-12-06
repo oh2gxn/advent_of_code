@@ -82,3 +82,22 @@ the program produce?
 
 file:int_code.rb <- seem like backwards compatible changes for day 2?
 file:spec/int_code_spec.rb
+
+Running the first time:
+: rbenv exec ruby int_code.rb day_5_input.csv
+TEST>1
+0
+0
+0
+0
+0
+0
+0
+0
+0
+6745903
+225.1 => 3
+
+6745903 was the correct code \o/
+
+

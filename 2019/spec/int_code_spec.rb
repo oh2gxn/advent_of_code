@@ -50,4 +50,21 @@ RSpec.describe IntCode do
       end
     end
   end
+
+  context 'with immediate value multiplication example' do
+    let :memory_dump { [1002,4,3,4,33] }
+
+    it 'returns 99 at 4' do
+      expect(subject.run(4)).to eq(99)
+    end
+  end
+
+  context 'with negative immediate value' do
+    let :memory_dump { [1101,100,-1,4,0]}
+
+    it 'returns 99 at 4' do
+      # shits its pants if it doesn't
+      expect(subject.run(4)).to eq(99)
+    end
+  end
 end  

@@ -46,11 +46,11 @@ class IntCode
     return nil if @ram.nil? || @ram.size.zero?
 
     instruction_pointer = 0
-    opcode = @ram[instruction_pointer]
-    while opcode != HALT
-      inc = execute(opcode, instruction_pointer)
+    instruction = parse_instruction(@ram[instruction_pointer])
+    while instruction[0] != HALT
+      inc = execute(instruction, instruction_pointer)
       instruction_pointer += inc
-      opcode = @ram[instruction_pointer]
+      instruction = parse_instruction(@ram[instruction_pointer])
     end
     @ram[pointer]
   end
@@ -58,38 +58,84 @@ class IntCode
   private
 
   ##
+  # Makes sense of parameter modes & opcode
+  # @param integer [Integer] an instruction
+  # @return [Array] opcode and parameter modes
+  def parse_instruction(integer)
+    # TODO: Instruction class?
+    [integer % 100,
+     (integer % 1000) / 100,
+     (integer % 10_000) / 1000,
+     (integer % 100_000) / 10_000]
+  end
+
+  ##
   # Executes a single instruction
-  # @param opcode [Integer] operation
-  # @param pointer [Integer] current program pointer
+  # @param instruction [Array<Integer>] opcode and 3 parameter modes
+  # @param pointer [Integer] current instruction pointer
   # @return [Integer,NilClass] increment to program pointer, nil when illegal instruction
-  def execute(opcode, pointer)
+  def execute(instruction, pointer)
+    opcode, *pmodes = instruction
     case opcode
     when ADD
-      ptr1 = @ram[pointer + 1]
-      ptr2 = @ram[pointer + 2]
-      ptr3 = @ram[pointer + 3]
-      @ram[ptr3] = @ram[ptr1] + @ram[ptr2]
+      add(pointer, pmodes)
       4
     when MUL
-      ptr1 = @ram[pointer + 1]
-      ptr2 = @ram[pointer + 2]
-      ptr3 = @ram[pointer + 3]
-      @ram[ptr3] = @ram[ptr1] * @ram[ptr2]
+      mul(pointer, pmodes)
       4
     when INP
-      ptr1 = @ram[pointer + 1]
-      $stdout.print PROMPT
-      @ram[ptr1] = Integer($stdin.gets)
+      inp(pointer, pmodes)
       2
     when OUT
-      ptr1 = @ram[pointer + 1]
-      $stdout.puts "#{@ram[ptr1].to_s}"
+      out(pointer, pmodes)
       2
     when HALT
       1
     else
-      raise ArgumentError "Illegal instruction at #{instruction_pointer}"
+      raise(ArgumentError, "Illegal instruction #{opcode} at #{pointer}")
     end
+  end
+
+  # execute addition at a memory location
+  # @param pointer [Integer] instruction pointer
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  def add(pointer, pmodes)
+    arg1 = @ram[pointer + 1]
+    arg1 = @ram[arg1] if pmodes[0].zero?
+    arg2 = @ram[pointer + 2]
+    arg2 = @ram[arg2] if pmodes[1].zero?
+    arg3 = @ram[pointer + 3]
+    @ram[arg3] = arg1 + arg2 # TODO: pmodes[2] == 1?
+  end
+
+  # execute multiplication at a memory location
+  # @param pointer [Integer] instruction pointer
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  def mul(pointer, pmodes)
+    arg1 = @ram[pointer + 1]
+    arg1 = @ram[arg1] if pmodes[0].zero?
+    arg2 = @ram[pointer + 2]
+    arg2 = @ram[arg2] if pmodes[1].zero?
+    arg3 = @ram[pointer + 3]
+    @ram[arg3] = arg1 * arg2 # TODO: pmodes[2] == 1?
+  end
+
+  # execute input at a memory location
+  # @param pointer [Integer] instruction pointer
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  def inp(pointer, _pmodes)
+    arg1 = @ram[pointer + 1]
+    $stdout.print PROMPT
+    @ram[arg1] = Integer($stdin.gets) # TODO: pmodes[0] == 1?
+  end
+
+  # execute output at a memory location
+  # @param pointer [Integer] instruction pointer
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  def out(pointer, pmodes)
+    arg1 = @ram[pointer + 1]
+    arg1 = @ram[arg1] if pmodes[0].zero?
+    $stdout.puts arg1.to_s
   end
 
 end

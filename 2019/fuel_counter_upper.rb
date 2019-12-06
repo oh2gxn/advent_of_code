@@ -27,7 +27,7 @@ class RocketModule
     # could be done recursively, if you have enough stack, or tail recursion
     while residual > 0.0
       residual = fuel_to_mass(residual)
-      raise StandardError 'This fuel weighs more than it is worth.' if residual >= @mass
+      raise(StandardError, 'This fuel weighs more than it is worth.') if residual >= @mass
 
       fuel += residual
     end
