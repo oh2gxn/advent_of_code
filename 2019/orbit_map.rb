@@ -65,6 +65,31 @@ class Orbit
     end
   end
 
+  # Insert new data to a hash
+  # @param orbit_map [Hash] id -> Orbit
+  # @param parent_id [String]
+  # @param id [String]
+  # @return [Integer] 1 if the new orbit is still orphaned
+  def self.insert_new_orbit(orbit_map, parent_id, id)
+    o = Orbit.new(id, parent_id)
+    orbit_map[id] = o # accumulate objects
+    parent = orbit_map[parent_id] # possibly not seen yet
+    return 1 unless o.add_parent(parent)
+
+    0
+  end
+
+  # Iteratively find and match new parents, to estimate tier
+  # @param orbit_map [Hash] id -> Orbit
+  # @return [Integer] number of orbits still out there
+  def self.find_new_parents(orbit_map)
+    orphan_count = 0
+    orbit_map.values.each do |o|
+      orphan_count += 1 if o.orphaned? && o.add_parent(orbit_map[o.parent_id]).nil?
+    end
+    orphan_count
+  end
+
 end
 
 if $PROGRAM_NAME == __FILE__
@@ -80,21 +105,13 @@ if $PROGRAM_NAME == __FILE__
   iteration_count = 0
   orphan_count = 0
   CSV.foreach(file_name, col_sep: ')') do |row|
-    parent_id = row[0]
-    object_id = row[1]
-    o = Orbit.new(object_id, parent_id)
-    orbit_map[object_id] = o # accumulate objects
-    parent = orbit_map[parent_id] # possibly not seen yet
-    orphan_count += 1 unless o.add_parent(parent)
+    orphan_count += Orbit.insert_new_orbit(orbit_map, row[0], row[1])
   end
 
   # NOTE: input might be shuffled (non-causal), which is not nice
   until orphan_count.zero?
     iteration_count += 1
-    orphan_count = 0
-    orbit_map.values.each do |o|
-      orphan_count += 1 if o.orphaned? && o.add_parent(orbit_map[o.parent_id]).nil?
-    end
+    orphan_count = Orbit.find_new_parents(orbit_map)
     break if iteration_count > orbit_map.size # worst case
   end
 

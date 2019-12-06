@@ -84,20 +84,11 @@ RSpec.describe Orbit do
       iteration_count = 0
       orphan_count = 0
       input_data.each do |row|
-        parent_id = row[0]
-        object_id = row[1]
-        object = Orbit.new(object_id, parent_id) # accumulate objects
-        orbit_map[object_id] = object
-        parent = orbit_map[parent_id]
-        orphan_count += 1 unless object.add_parent(parent)
+        orphan_count += described_class.insert_new_orbit(orbit_map, row[0], row[1])
       end
-      # NOTE: input might be shuffled (non-causal), which is not nice
       until orphan_count.zero?
         iteration_count += 1
-        orphan_count = 0
-        orbit_map.values.each do |o|
-          orphan_count += 1 if o.orphaned? && o.add_parent(orbit_map[o.parent_id]).nil?
-        end
+        orphan_count = described_class.find_new_parents(orbit_map)
         break if iteration_count > orbit_map.size # worst case
       end
 
