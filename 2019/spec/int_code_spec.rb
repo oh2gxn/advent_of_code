@@ -36,4 +36,18 @@ RSpec.describe IntCode do
       expect(subject.run(4)).to eq(2)
     end
   end
+
+  context 'with the echo example' do
+    let :memory_dump { [3,0,4,0,99] }
+
+    context 'given 42 as input' do
+      before { allow($stdin).to receive(:gets).and_return('42') }
+      
+      it 'outputs 42' do
+        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stdout).to receive(:puts).with('42')
+        expect(subject.run(0)).to eq(42)
+      end
+    end
+  end
 end  

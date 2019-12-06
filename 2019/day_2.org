@@ -129,6 +129,13 @@ file:int_code.rb
 After some tweaking:
 : rbenv exec ruby int_code.rb day_2_input.csv 12 2
 12.2 => 6730673
+: rbenv exec ruby int_code.rb day_2_input.csv 0:99 0:99 | grep 19690720
+37.49 => 19690720
 
+Some more tweaking for day 5:
+: rbenv exec ruby int_code.rb day_2_input.csv
+0.0 => 509871
+: rbenv exec ruby int_code.rb day_2_input.csv 12 2
+12.2 => 6730673
 : rbenv exec ruby int_code.rb day_2_input.csv 0:99 0:99 | grep 19690720
 37.49 => 19690720
