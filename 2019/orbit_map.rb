@@ -47,6 +47,7 @@ class Orbit
     return @tier unless parent.children[@id].nil?
 
     parent.children[@id] = self
+    @parent = parent
     @tier = parent.tier + 1
   end
 
@@ -63,6 +64,13 @@ class Orbit
       sum[:direct] += oc[:direct]
       sum[:indirect] += oc[:indirect]
     end
+  end
+
+  # lists orbits of a single object
+  def list_orbits
+    return [] if @tier.zero? || @parent.nil?
+
+    @parent.list_orbits << @parent
   end
 
   # Insert new data to a hash
@@ -95,7 +103,7 @@ end
 if $PROGRAM_NAME == __FILE__
   # CLI for the 6th day
   if ARGV.empty?
-    puts "Usage: #{$PROGRAM_NAME} file.csv"
+    puts "Usage: #{$PROGRAM_NAME} file.csv [ID, ID...]"
     return 1
   end
   file_name = ARGV[0]
@@ -115,5 +123,12 @@ if $PROGRAM_NAME == __FILE__
     break if iteration_count > orbit_map.size # worst case
   end
 
-  puts com.count_orbits[:indirect]
+  puts "total: #{com.count_orbits[:indirect]} orbits"
+  if ARGV.length > 1
+    ARGV[1..-1].each do |id|
+      puts orbit_map[id]&.list_orbits.map(&:id).inspect
+      # TODO: another pass for removing common prefix
+      # TODO: counts after removing common prefix
+    end
+  end
 end

@@ -82,9 +82,11 @@ Which is correct!
 
 * Part Two
 
-Now, you just need to figure out how many orbital transfers you (YOU) need to take to get to Santa (SAN).
+Now, you just need to figure out how many orbital transfers you (YOU) need to take to get to Santa
+(SAN).
 
-You start at the object YOU are orbiting; your destination is the object SAN is orbiting. An orbital transfer lets you move from any object to an object orbiting or orbited by that object.
+You start at the object YOU are orbiting; your destination is the object SAN is orbiting. An orbital
+transfer lets you move from any object to an object orbiting or orbited by that object.
 
 For example, suppose you have the following map:
 
@@ -112,7 +114,8 @@ COM - B - C - D - E - F
                \
                 I - SAN
 
-In this example, YOU are in orbit around K, and SAN is in orbit around I. To move from K to I, a minimum of 4 orbital transfers are required:
+In this example, YOU are in orbit around K, and SAN is in orbit around I. To move from K to I, a
+minimum of 4 orbital transfers are required:
 
     K to J
     J to E
@@ -129,5 +132,61 @@ COM - B - C - D - E - F
                  \
                   YOU
 
-What is the minimum number of orbital transfers required to move from the object YOU are orbiting to the object SAN is orbiting? (Between the objects they are orbiting - not between YOU and SAN.)
+What is the minimum number of orbital transfers required to move from the object YOU are orbiting to
+the object SAN is orbiting? (Between the objects they are orbiting - not between YOU and SAN.)
 
+Implementing list_orbits for given examples:
+: rbenv exec ruby orbit_map.rb day_6_input.csv YOU SAN
+total: 253104 orbits
+["COM", "9JW", "7X5", "7P8", "457", "VX9", "HT3", "VC8", "WL3", "2RL", "X5D", "T9T", "XH2", "6MC", "PYF", "7TH", "T88", "31H", "DBZ", "9TV", "XMM", "1X8", "2Z3", "QV7", "S9K", "2S2", "LPB", "3GV", "J2S", "QM6", "GXD", "SX1", "VLD", "DWP", "TBM", "RQZ", "L6C", "HPZ", "41Z", "7TL", "L65", "H6Y", "DZW", "TBV", "TLY", "R1J", "H9J", "8SC", "YV5", "VT7", "7M2", "F95", "FFZ", "HJ7", "513", "RFZ", "YC9", "NSQ", "8B3", "T4R", "S1T", "2QG", "KMM", "X31", "BHR", "VK9", "GNW", "XW1", "9QL", "C96", "NFV", "12Z", "BNX", "9SH", "Q8T", "8WB", "4BG", "DHN", "QYN", "84R", "BHH", "CDR", "MNK", "471", "S2G", "51H", "7BP", "ZMG", "3MW", "VS1", "Y6C", "X4V", "CVP", "QGR", "XJK", "SXQ", "J75", "PWF", "SN6", "WR6", "FG3", "FFL", "CHG", "WVC", "BMT", "S2W", "BHQ", "WFL", "ZN2", "995", "825", "7GK", "CSL", "KJJ", "MCG", "TDJ", "C7B", "BYZ", "DYC", "NY8", "CLS", "M7M", "389", "Q7Z", "BKJ", "LWH", "SRN", "GHM", "PY1", "FRB", "R3T", "6M6", "784", "LZ9", "K1G", "DLL", "DW3", "V2V", "BL1", "RGL", "BYG", "G3H", "64B", "KRM", "TNG", "6ZN", "VPJ", "55L", "DCQ", "SNG", "4L5", "FRL", "C7H", "X3Y", "C67", "XGM", "KD8", "7YX", "6DY", "7X1", "FPG", "XXQ", "4JW", "29H", "G1L", "VRF", "9MX", "611", "P4D", "MFL", "T1M", "LW7", "HLC", "R1Y", "ZL7", "NL4", "XQ9", "3HN", "TKY", "NYB", "TM2", "RTT", "HTJ", "SK2", "HD6", "SQ4", "MHM", "TK6", "QHD", "R91", "6Q9", "YJ5", "FPM", "YKV", "B6Q", "8PP", "YXN", "JC5", "CFQ", "RKP", "XCD", "JLR", "3PM", "6GT", "651", "VG4", "7RS", "SB2", "8HD", "3Q5", "MWN", "C5H", "QRV", "C68", "X5M", "LSV", "QNJ", "VD9", "LJX", "P1V", "GNX", "YC3", "FZL", "VFV", "8XR", "LWX", "KCT", "RRC", "DKM", "XQQ", "J6G", "B1Y", "NZJ", "QNF", "17D", "2SH", "SFW", "NL3", "KPG", "QC5", "LPK", "BD5", "L7K", "LPP", "N3V", "XJ1", "7WG", "YVZ", "H1M", "1S2", "2TD", "2CS", "MXB", "V9W", "DHQ", "ZXG", "SMR", "JR9", "H2M", "L2Y", "KXQ", "LQ9", "J4J", "4NH", "2GN", "CDM", "MZ9", "FZF", "6TB", "55K", "QS2", "J62", "PK7", "3DT", "Y93", "GH3", "54Y", "TZZ", "C6X", "NMX", "J5X", "C9N", "2Z7", "2X8", "WFH", "P7V", "52T", "14K", "5HD", "PGC", "ZXS", "M2Z", "38C", "N84", "CV9", "NRZ", "4RH", "2T6", "R9B", "RSP", "JP2", "1KX", "WBF", "Y1T", "5H1", "X7K", "DJH", "CV2", "DLZ", "TFB"]
+["COM", "9JW", "7X5", "7P8", "457", "VX9", "HT3", "VC8", "WL3", "2RL", "X5D", "T9T", "XH2", "6MC", "PYF", "7TH", "T88", "31H", "DBZ", "9TV", "XMM", "1X8", "2Z3", "QV7", "S9K", "2S2", "LPB", "3GV", "J2S", "QM6", "GXD", "SX1", "VLD", "DWP", "TBM", "RQZ", "L6C", "HPZ", "41Z", "7TL", "L65", "H6Y", "DZW", "TBV", "TLY", "R1J", "H9J", "8SC", "YV5", "VT7", "7M2", "F95", "FFZ", "HJ7", "513", "RFZ", "YC9", "Q38", "QZK", "82V", "J7T", "2FT", "TLG", "KZJ", "XCF", "LJG", "B3G", "Q5T", "XT3", "DGC", "9VB", "7Q6", "5ZM", "W82", "W4H", "9T7", "84H", "VLW", "DLR", "YH9", "CQR", "6YP", "6LF", "S8Q", "7VW", "5TG", "XSS", "ZFV", "P9T", "YPT", "FBX", "61P", "P63", "DPW", "RN3", "TT2", "MG2", "N91", "SPY", "HR7", "LP8", "CGH", "YCG", "KK5", "HNV", "MYP", "6M8", "M48", "GS2", "FTN", "ZYG", "PBM", "1KG", "Q4H", "QYP", "RTV", "V4T", "847", "N4J", "2JC", "689", "BSQ", "H1L", "Z8R", "JCR", "14W", "YD1", "YXC", "WDF", "815", "BM6", "GXQ", "Q6G", "B63", "SBL", "BPL", "51T", "CJ1", "G9Y", "BSB", "GFP", "F3G", "9GR", "Q8N", "DGS", "BGG", "5TX", "N1L", "FCH", "MXQ", "T5B", "HQS", "7VT", "VQT", "XNP", "SNZ", "7J4", "DQP", "2VD", "2YM", "NY9", "TJJ", "9KD", "22H", "QBS", "VKT", "5V6", "PND", "YMP", "6SN", "6BC", "6HV", "PG2", "L9Y", "HTH", "R8D", "MC7", "VPF", "9YR", "1YV", "QBB", "ZR6", "JM9", "NGV", "71S", "C4K", "L1T", "D6Z", "JZM", "BV4", "FY7", "KZ6", "K8S", "BLT", "NB1", "GL4", "HZQ", "57G", "DZ6", "8HT", "PQY", "11Y", "7HW", "512", "VD7", "M8Z", "FDT", "ZCD", "9WH", "SVY", "SGX", "N3D", "9LN", "8MT", "8N9", "VKS", "LPH", "6LG", "V2H", "H4K", "WDM", "8M1", "JWR", "G4B", "QCS", "VHQ", "FSW", "YQC", "459", "HSX", "BR6", "CQB", "YT7", "XVV", "Q8J", "S8C", "F1B", "CNY", "QFN", "GPB", "MH8", "347", "RXJ", "3X3", "79D", "M1S", "TT3", "SGG", "F3D", "SWG", "QXK", "2YW", "ZPV", "DN6", "YP8", "P5J", "TRZ", "42V", "8XD", "95C", "19J", "47G", "HSQ", "BJS", "C65", "9FN", "HJZ", "9NB", "S4P", "S2R", "ZPD", "7W7", "VH6", "PQD", "FLH", "BJV", "29T", "7MR", "DVX", "3ZC", "ZXW", "HKT", "VF6", "PHB", "FHY", "YKX", "TYX", "75R", "MV6", "Y5R", "5MC", "ZZ4", "DYB", "4W6", "79N", "RTQ", "W13", "MLV", "KSX", "GW2", "D4D", "J4G", "7GP"]
+
+Common prefix seems to be:
+["COM", "9JW", "7X5", "7P8", "457", "VX9", "HT3", "VC8", "WL3", "2RL", "X5D", "T9T", "XH2", "6MC", "PYF", "7TH", "T88", "31H", "DBZ", "9TV", "XMM", "1X8", "2Z3", "QV7", "S9K", "2S2", "LPB", "3GV", "J2S", "QM6", "GXD", "SX1", "VLD", "DWP", "TBM", "RQZ", "L6C", "HPZ", "41Z", "7TL", "L65", "H6Y", "DZW", "TBV", "TLY", "R1J", "H9J", "8SC", "YV5", "VT7", "7M2", "F95", "FFZ", "HJ7", "513", "RFZ", "YC9"]
+
+Transfers to that common orbit:
+YOU: ["NSQ", "8B3", "T4R", "S1T", "2QG", "KMM", "X31", "BHR", "VK9", "GNW", "XW1", "9QL", "C96",
+"NFV", "12Z", "BNX", "9SH", "Q8T", "8WB", "4BG", "DHN", "QYN", "84R", "BHH", "CDR", "MNK", "471",
+"S2G", "51H", "7BP", "ZMG", "3MW", "VS1", "Y6C", "X4V", "CVP", "QGR", "XJK", "SXQ", "J75", "PWF",
+"SN6", "WR6", "FG3", "FFL", "CHG", "WVC", "BMT", "S2W", "BHQ", "WFL", "ZN2", "995", "825", "7GK",
+"CSL", "KJJ", "MCG", "TDJ", "C7B", "BYZ", "DYC", "NY8", "CLS", "M7M", "389", "Q7Z", "BKJ", "LWH",
+"SRN", "GHM", "PY1", "FRB", "R3T", "6M6", "784", "LZ9", "K1G", "DLL", "DW3", "V2V", "BL1", "RGL",
+"BYG", "G3H", "64B", "KRM", "TNG", "6ZN", "VPJ", "55L", "DCQ", "SNG", "4L5", "FRL", "C7H", "X3Y",
+"C67", "XGM", "KD8", "7YX", "6DY", "7X1", "FPG", "XXQ", "4JW", "29H", "G1L", "VRF", "9MX", "611",
+"P4D", "MFL", "T1M", "LW7", "HLC", "R1Y", "ZL7", "NL4", "XQ9", "3HN", "TKY", "NYB", "TM2", "RTT",
+"HTJ", "SK2", "HD6", "SQ4", "MHM", "TK6", "QHD", "R91", "6Q9", "YJ5", "FPM", "YKV", "B6Q", "8PP",
+"YXN", "JC5", "CFQ", "RKP", "XCD", "JLR", "3PM", "6GT", "651", "VG4", "7RS", "SB2", "8HD", "3Q5",
+"MWN", "C5H", "QRV", "C68", "X5M", "LSV", "QNJ", "VD9", "LJX", "P1V", "GNX", "YC3", "FZL", "VFV",
+"8XR", "LWX", "KCT", "RRC", "DKM", "XQQ", "J6G", "B1Y", "NZJ", "QNF", "17D", "2SH", "SFW", "NL3",
+"KPG", "QC5", "LPK", "BD5", "L7K", "LPP", "N3V", "XJ1", "7WG", "YVZ", "H1M", "1S2", "2TD", "2CS",
+"MXB", "V9W", "DHQ", "ZXG", "SMR", "JR9", "H2M", "L2Y", "KXQ", "LQ9", "J4J", "4NH", "2GN", "CDM",
+"MZ9", "FZF", "6TB", "55K", "QS2", "J62", "PK7", "3DT", "Y93", "GH3", "54Y", "TZZ", "C6X", "NMX",
+"J5X", "C9N", "2Z7", "2X8", "WFH", "P7V", "52T", "14K", "5HD", "PGC", "ZXS", "M2Z", "38C", "N84",
+"CV9", "NRZ", "4RH", "2T6", "R9B", "RSP", "JP2", "1KX", "WBF", "Y1T", "5H1", "X7K", "DJH", "CV2",
+"DLZ", "TFB"]
+
+: 18*14 - 1 + 2 = 253
+
+SAN: ["Q38", "QZK", "82V", "J7T", "2FT", "TLG", "KZJ", "XCF", "LJG", "B3G", "Q5T", "XT3", "DGC",
+"9VB", "7Q6", "5ZM", "W82", "W4H", "9T7", "84H", "VLW", "DLR", "YH9", "CQR", "6YP", "6LF", "S8Q",
+"7VW", "5TG", "XSS", "ZFV", "P9T", "YPT", "FBX", "61P", "P63", "DPW", "RN3", "TT2", "MG2", "N91",
+"SPY", "HR7", "LP8", "CGH", "YCG", "KK5", "HNV", "MYP", "6M8", "M48", "GS2", "FTN", "ZYG", "PBM",
+"1KG", "Q4H", "QYP", "RTV", "V4T", "847", "N4J", "2JC", "689", "BSQ", "H1L", "Z8R", "JCR", "14W",
+"YD1", "YXC", "WDF", "815", "BM6", "GXQ", "Q6G", "B63", "SBL", "BPL", "51T", "CJ1", "G9Y", "BSB",
+"GFP", "F3G", "9GR", "Q8N", "DGS", "BGG", "5TX", "N1L", "FCH", "MXQ", "T5B", "HQS", "7VT", "VQT",
+"XNP", "SNZ", "7J4", "DQP", "2VD", "2YM", "NY9", "TJJ", "9KD", "22H", "QBS", "VKT", "5V6", "PND",
+"YMP", "6SN", "6BC", "6HV", "PG2", "L9Y", "HTH", "R8D", "MC7", "VPF", "9YR", "1YV", "QBB", "ZR6",
+"JM9", "NGV", "71S", "C4K", "L1T", "D6Z", "JZM", "BV4", "FY7", "KZ6", "K8S", "BLT", "NB1", "GL4",
+"HZQ", "57G", "DZ6", "8HT", "PQY", "11Y", "7HW", "512", "VD7", "M8Z", "FDT", "ZCD", "9WH", "SVY",
+"SGX", "N3D", "9LN", "8MT", "8N9", "VKS", "LPH", "6LG", "V2H", "H4K", "WDM", "8M1", "JWR", "G4B",
+"QCS", "VHQ", "FSW", "YQC", "459", "HSX", "BR6", "CQB", "YT7", "XVV", "Q8J", "S8C", "F1B", "CNY",
+"QFN", "GPB", "MH8", "347", "RXJ", "3X3", "79D", "M1S", "TT3", "SGG", "F3D", "SWG", "QXK", "2YW",
+"ZPV", "DN6", "YP8", "P5J", "TRZ", "42V", "8XD", "95C", "19J", "47G", "HSQ", "BJS", "C65", "9FN",
+"HJZ", "9NB", "S4P", "S2R", "ZPD", "7W7", "VH6", "PQD", "FLH", "BJV", "29T", "7MR", "DVX", "3ZC",
+"ZXW", "HKT", "VF6", "PHB", "FHY", "YKX", "TYX", "75R", "MV6", "Y5R", "5MC", "ZZ4", "DYB", "4W6",
+"79N", "RTQ", "W13", "MLV", "KSX", "GW2", "D4D", "J4G", "7GP"]
+
+: 18*14 - 1 - 5 = 246
+: 253 + 246 = 499
+
+499 is the correct number of orbital transfers between YOU & SAN
