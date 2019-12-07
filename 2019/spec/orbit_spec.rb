@@ -4,7 +4,7 @@ require_relative '../orbit_map'
 
 RSpec.describe Orbit do
   let :com { described_class.new(described_class::COM_ID, nil) }
-  
+
   context 'with empty map' do
     describe 'COM.count_orbits' do
       subject { com.count_orbits[:indirect] }
@@ -41,8 +41,8 @@ RSpec.describe Orbit do
         expect(subject.length).to eq(1)
         expect(subject.first).to eq(com)
       end
-    end    
-  end  
+    end
+  end
 
   context 'with two direct orbits' do
     let :child1 { described_class.new('FOO', described_class::COM_ID) }
@@ -58,7 +58,7 @@ RSpec.describe Orbit do
         expect(subject).to eq(2)
       end
     end
-  end  
+  end
 
   context 'with two chained orbits' do
     let :child1 { described_class.new('FOO', described_class::COM_ID) }
@@ -73,7 +73,7 @@ RSpec.describe Orbit do
       it 'is 3' do
         expect(subject).to eq(3)
       end
-    end    
+    end
 
     describe 'child2.list_orbits' do
       subject { child2.list_orbits }
@@ -82,8 +82,8 @@ RSpec.describe Orbit do
         expect(subject.first).to eq(com)
         expect(subject.last).to eq(child1)
       end
-    end    
-  end  
+    end
+  end
 
   context 'with the bigger example' do
     let :input_data do
@@ -118,7 +118,7 @@ RSpec.describe Orbit do
       it 'is 42' do
         expect(subject).to eq(42)
       end
-    end    
+    end
 
     describe 'D.list_orbits' do
       subject { orbit_map['D'].list_orbits }
@@ -126,7 +126,7 @@ RSpec.describe Orbit do
         expect(subject.length).to eq(3)
         expect(subject.map(&:id)).to contain_exactly('COM', 'B', 'C')
       end
-    end    
+    end
 
     describe 'L.list_orbits' do
       subject { orbit_map['L'].list_orbits }
@@ -134,6 +134,6 @@ RSpec.describe Orbit do
         expect(subject.length).to eq(7)
         expect(subject.map(&:id)).to contain_exactly('COM', 'B', 'C', 'D', 'E', 'J', 'K')
       end
-    end    
-  end  
+    end
+  end
 end
