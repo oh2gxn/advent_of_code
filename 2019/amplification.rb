@@ -9,6 +9,22 @@
 require 'csv'
 require_relative 'int_code'
 
+# A hack for forking output, not sure if thread safe anything
+class ForkedIO
+
+  # Have output written to original output and an input too
+  def initialize(original_output, input)
+    @output = original_output
+    @input = input
+  end
+
+  def puts(str)
+    @output.puts(str)
+    @input.puts(str)
+  end
+
+end
+
 # Sequence of IntCode virtual machines running a program
 class AmplifierCascade
 
@@ -18,7 +34,8 @@ class AmplifierCascade
   # @param program [Array<Integer>] IntCode program executed by each amplifier
   # @param phases [Array<String>] integers given to each amplifier as phase setting
   # @param output [IO] last amplifier will puts the final result here
-  def initialize(program, phases, output = STDOUT)
+  # @param feedback [Boolean] true if last amp feeds back to the first one
+  def initialize(program, phases, output = STDOUT, feedback = false)
     @amps = []
     return if phases.nil? || phases.empty?
 
@@ -34,47 +51,57 @@ class AmplifierCascade
       @amps << IntCode.new(program, rd, wt, nil)
       rd = rd_next
     end
+    output = ForkedIO.new(output, input) if feedback # anon class?
     @amps << IntCode.new(program, rd, output, nil)
   end
 
   # Run each of the Amplifiers in the chain
   def run(ptr)
-    # TODO: threads and stuff?
-    res = nil
+    threads = [] # threads and stuff, or else they block via IO
+    results = []
     @amps.each do |amp|
-      res = amp.run(ptr)
+      threads << Thread.new do
+        Thread.current.thread_variable_set(:result, amp.run(ptr))
+      end
     end
-    res
+    threads.each do |th|
+      th.join
+      results << th.thread_variable_get(:result)      
+    end
+    results.last
   end
 end
 
 if $PROGRAM_NAME == __FILE__
   # CLI for the 7th day
   if ARGV.empty?
-    puts "Usage: #{$PROGRAM_NAME} int_code.csv [phase_A, phase_B,...]"
+    puts "Usage: #{$PROGRAM_NAME} int_code.csv [false/true] [phase_A, phase_B,...]"
     return 1
   end
 
   program = CSV.read(ARGV[0]).first
-  if ARGV.length > 1
+  feedback = false # default: no feedback from final Amp to first Amp
+  feedback = ARGV[1] =~ /[yY1tT]/ if ARGV.length > 1
+  if ARGV.length > 2
     # run single cascade of given number of amps in given phases => single output
-    phases = ARGV[1..-1]
-    amps = AmplifierCascade.new(program, phases, $stdout)
+    phases = ARGV[2..-1]
+    amps = AmplifierCascade.new(program, phases, $stdout, feedback)
     amps.run(9)
   else
     # run cascade of 5 amps in all possible phases [0..4] => 5! == 120 outputs
-    (0..4).each do |p0|
-      (0..4).each do |p1|
+    range = feedback ? (5..9) : (0..4)
+    range.each do |p0|
+      range.each do |p1|
         next if p0 == p1
-        (0..4).each do |p2|
+        range.each do |p2|
           next if p0 == p2 || p1 == p2
-          (0..4).each do |p3|
+          range.each do |p3|
             next if p0 == p3 || p1 == p3 || p2 == p3
-            (0..4).each do |p4|
+            range.each do |p4|
               next if p0 == p4 || p1 == p4 || p2 == p4 || p3 == p4 # hack
               phases = [p0, p1, p2, p3, p4]
               $stdout.print phases.inspect + ':'
-              amps = AmplifierCascade.new(program, phases.map(&:to_s), $stdout)
+              amps = AmplifierCascade.new(program, phases.map(&:to_s), $stdout, feedback)
               amps.run(9)
             end
           end

@@ -238,4 +238,25 @@ Here are some example programs:
 Try every combination of the new phase settings on the amplifier feedback loop. What is the highest
 signal that can be sent to the thrusters?
 
-TODO: this requires running the stuff concurrently until finished...
+This requires running the stuff concurrently until finished... and passing additional flag for
+activating feedback:
+: rbenv exec ruby amplification.rb day_7_input.csv f 1 3 4 2 0
+46014
+: rbenv exec ruby amplification.rb day_7_input.csv t 1 3 4 2 0
+46014
+
+Old stuff still works, not sure if threading OK though.
+Probably not:
+: rbenv exec rspec
+...*.................................................................
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) AmplifierCascade with test program 4 with phases 9,8,7,6,5 outputs 139629729
+     # Temporarily skipped with xit
+     # ./spec/amplifier_cascade_spec.rb:61
+
+
+Finished in 0.35345 seconds (files took 0.13942 seconds to load)
+69 examples, 0 failures, 1 pending
+
