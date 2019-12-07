@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 ##
-# Advent of Code / 2019 / Day 2+5
+# Advent of Code / 2019 / Day 2+5+7
 #
 # @author oh2gxn
 
@@ -46,8 +46,14 @@ class IntCode
 
   # Constructor
   # @param memory_dump [Array<Integer>] contents of RAM
-  def initialize(memory_dump)
+  # @param input [IO] an object with gets method
+  # @param output [IO] an object with puts method
+  # @param err [IO, NilClass] an object with print method for interactive messages
+  def initialize(memory_dump, input = STDIN, output = STDOUT, err = STDERR)
     @ram = memory_dump.map(&:to_i)
+    @input = input
+    @output = output
+    @err = err
   end
 
   ##
@@ -147,8 +153,8 @@ class IntCode
   # @return [Integer] new instruction pointer
   def inp(pointer, _pmodes)
     arg1 = @ram[pointer + 1]
-    $stdout.print PROMPT
-    @ram[arg1] = Integer($stdin.gets) # TODO: pmodes[0] == 1?
+    @err.print PROMPT unless @err.nil?
+    @ram[arg1] = Integer(@input.gets) # TODO: pmodes[0] == 1?
     pointer + 2
   end
 
@@ -159,7 +165,7 @@ class IntCode
   def out(pointer, pmodes)
     arg1 = @ram[pointer + 1]
     arg1 = @ram[arg1] if pmodes[0].zero?
-    $stdout.puts arg1.to_s
+    @output.puts arg1.to_s
     pointer + 2
   end
 
@@ -241,7 +247,7 @@ end
 def run_program(line)
   noun = line[1]
   verb = line[2]
-  vm = IntCode.new(line)
+  vm = IntCode.new(line, $stdin, $stdout, $stderr)
   res = vm.run(0)
   $stdout.puts "#{noun}.#{verb} => #{res}" # day 2 output
 end

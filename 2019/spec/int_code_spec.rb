@@ -44,7 +44,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('42') }
 
       it 'outputs 42' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('42')
         expect(subject.run(0)).to eq(42)
       end
@@ -75,7 +75,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('8') }
 
       it 'outputs 1' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1')
         expect(subject.run(9)).to eq(1)
       end
@@ -85,7 +85,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('42') }
 
       it 'outputs 0' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('0')
         expect(subject.run(9)).to eq(0)
       end
@@ -99,7 +99,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('7') }
 
       it 'outputs 1' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1')
         expect(subject.run(9)).to eq(1)
       end
@@ -109,7 +109,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('8') }
 
       it 'outputs 0' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('0')
         expect(subject.run(9)).to eq(0)
       end
@@ -123,7 +123,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('8') }
 
       it 'outputs 1' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1')
         expect(subject.run(3)).to eq(1)
       end
@@ -133,7 +133,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('42') }
 
       it 'outputs 0' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('0')
         expect(subject.run(3)).to eq(0)
       end
@@ -147,7 +147,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('7') }
 
       it 'outputs 1' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1')
         expect(subject.run(3)).to eq(1)
       end
@@ -157,7 +157,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('8') }
 
       it 'outputs 0' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('0')
         expect(subject.run(3)).to eq(0)
       end
@@ -171,7 +171,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('42') }
 
       it 'outputs 1' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1')
         expect(subject.run(13)).to eq(1)
       end
@@ -181,7 +181,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('0') }
 
       it 'outputs 0' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('0')
         expect(subject.run(13)).to eq(0)
       end
@@ -195,7 +195,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('42') }
 
       it 'outputs 1' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1')
         expect(subject.run(12)).to eq(1)
       end
@@ -205,7 +205,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('0') }
 
       it 'outputs 0' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('0')
         expect(subject.run(12)).to eq(0)
       end
@@ -239,7 +239,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('7') }
 
       it 'outputs 999 in immediate mode' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('999')
         expect(subject.run(46)).to eq(99) # just output, not writing it down
       end
@@ -249,7 +249,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('8') }
 
       it 'outputs 1000' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1000')
         expect(subject.run(20)).to eq(1000)
       end
@@ -259,7 +259,7 @@ RSpec.describe IntCode do
       before { allow($stdin).to receive(:gets).and_return('9') }
 
       it 'outputs 1001' do
-        allow($stdout).to receive(:print).with(described_class::PROMPT)
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
         allow($stdout).to receive(:puts).with('1001')
         expect(subject.run(20)).to eq(1001)
       end
