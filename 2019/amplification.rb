@@ -12,15 +12,24 @@ require_relative 'int_code'
 # A hack for forking output, not sure if thread safe anything
 class ForkedIO
 
-  # Have output written to original output and an input too
-  def initialize(original_output, input)
-    @output = original_output
-    @input = input
+  # Have output written (puts) to original output and an input too
+  # @param original_output [IO] something with #puts and #flush
+  # @param another_output [IO] something with #puts
+  def initialize(original_output, another_output)
+    @output1 = original_output
+    @output2 = another_output
   end
 
+  # Write to both outputs
   def puts(str)
-    @output.puts(str)
-    @input.puts(str)
+    @output2.puts(str)
+    @output1.puts(str)
+  end
+
+  # Flush both outputs
+  def flush
+    @output2.flush
+    @output1.flush
   end
 
 end
@@ -58,17 +67,11 @@ class AmplifierCascade
   # Run each of the Amplifiers in the chain
   def run(ptr)
     threads = [] # threads and stuff, or else they block via IO
-    results = []
     @amps.each do |amp|
-      threads << Thread.new do
-        Thread.current.thread_variable_set(:result, amp.run(ptr))
-      end
+      threads << Thread.new { amp.run(ptr) }
     end
-    threads.each do |th|
-      th.join
-      results << th.thread_variable_get(:result)      
-    end
-    results.last
+    threads.each { |th| th.join }
+    threads.last&.value
   end
 end
 

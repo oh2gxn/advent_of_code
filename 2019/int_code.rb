@@ -68,6 +68,7 @@ class IntCode
     while instruction[0] != HALT
       instruction_pointer = execute(instruction, instruction_pointer)
       instruction = parse_instruction(@ram[instruction_pointer])
+      Thread.pass # yield to other potential emulations here
     end
     @ram[pointer]
   end
@@ -166,6 +167,7 @@ class IntCode
     arg1 = @ram[pointer + 1]
     arg1 = @ram[arg1] if pmodes[0].zero?
     @output.puts arg1.to_s
+    @output.flush
     pointer + 2
   end
 

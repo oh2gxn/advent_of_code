@@ -52,7 +52,21 @@ RSpec.describe AmplifierCascade do
 
   context 'with test program 4' do
     let :program { [3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
-                    27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5] } # outputs ram[27]
+                    27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5] } # outputs ram[27], reads more input 5 times
+
+    context 'with a single amp in phase 5' do
+      let :phases { ['5'] }
+      let :feedback { true }
+
+      it 'outputs 1,3,7,15,31' do
+        allow($stdout).to receive(:puts).with('1')
+        allow($stdout).to receive(:puts).with('3')
+        allow($stdout).to receive(:puts).with('7')
+        allow($stdout).to receive(:puts).with('15')
+        allow($stdout).to receive(:puts).with('31')
+        expect(amps.run(27)).to eq(31)
+      end
+    end
 
     context 'with phases 9,8,7,6,5' do
       let :phases { ['9', '8', '7', '6', '5'] }

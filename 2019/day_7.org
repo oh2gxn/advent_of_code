@@ -260,3 +260,7 @@ Pending: (Failures listed here are expected and do not affect your suite's statu
 Finished in 0.35345 seconds (files took 0.13942 seconds to load)
 69 examples, 0 failures, 1 pending
 
+Some more testing:
+file:spec/forked_io_spec.rb
+
+
