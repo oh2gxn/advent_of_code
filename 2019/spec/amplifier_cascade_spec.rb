@@ -59,11 +59,11 @@ RSpec.describe AmplifierCascade do
       let :feedback { true }
 
       it 'outputs 1,3,7,15,31' do
-        allow($stdout).to receive(:puts).with('1')
-        allow($stdout).to receive(:puts).with('3')
-        allow($stdout).to receive(:puts).with('7')
-        allow($stdout).to receive(:puts).with('15')
-        allow($stdout).to receive(:puts).with('31')
+        allow($stdout).to receive(:puts).with('1').and_return(nil)
+        allow($stdout).to receive(:puts).with('3').and_return(nil)
+        allow($stdout).to receive(:puts).with('7').and_return(nil)
+        allow($stdout).to receive(:puts).with('15').and_return(nil)
+        allow($stdout).to receive(:puts).with('31').and_return(nil)
         expect(amps.run(27)).to eq(31)
       end
     end
@@ -72,9 +72,73 @@ RSpec.describe AmplifierCascade do
       let :phases { ['9', '8', '7', '6', '5'] }
       let :feedback { true }
 
-      xit 'outputs 139629729' do
-        allow($stdout).to receive(:puts).with('139629729')
+      it 'outputs 139629729' do
+        # NOTE: these have to be correct, or the test hangs
+        allow($stdout).to receive(:puts).with('129').and_return(nil)
+        allow($stdout).to receive(:puts).with('4257').and_return(nil)
+        allow($stdout).to receive(:puts).with('136353').and_return(nil)
+        allow($stdout).to receive(:puts).with('4363425').and_return(nil)
+        allow($stdout).to receive(:puts).with('139629729').and_return(nil)
         expect(amps.run(27)).to eq(139629729)
+      end
+    end
+  end
+
+  context 'with test program 5' do
+    let :program { [3,52,
+                    1001,52,-5,52,
+                    3,53,
+                    1,52,56,54,
+                    1007,54,5,55,
+                    1005,55,26,
+                    1001,54,-5,54,
+                    1105,1,12,
+                    1,53,54,53,
+                    1008,54,0,55,
+                    1001,55,1,55,
+                    2,53,55,53,
+                    4,53,
+                    1001,56,-1,56,
+                    1005,56,6,
+                    99,
+                    0,0,0,0,10] } # outputs ram[53], reads more input 10 times
+
+    context 'with a single amp in phase 5' do
+      let :phases { ['5'] }
+      let :feedback { true }
+
+      it 'outputs 1,3,7,15,31' do
+        allow($stdout).to receive(:puts).with('0').and_return(nil)
+        allow($stdout).to receive(:puts).with('4').and_return(nil)
+        allow($stdout).to receive(:puts).with('7').and_return(nil)
+        allow($stdout).to receive(:puts).with('9').and_return(nil)
+        allow($stdout).to receive(:puts).with('10').and_return(nil)
+        allow($stdout).to receive(:puts).with('20').and_return(nil)
+        allow($stdout).to receive(:puts).with('24').and_return(nil)
+        allow($stdout).to receive(:puts).with('27').and_return(nil)
+        allow($stdout).to receive(:puts).with('29').and_return(nil)
+        allow($stdout).to receive(:puts).with('30').and_return(nil)
+        expect(amps.run(53)).to eq(30)
+      end
+    end
+
+    context 'with phases 9,7,8,5,6' do
+      let :phases { ['9', '7', '8', '5', '6'] }
+      let :feedback { true }
+
+      it 'outputs 18216' do
+        # NOTE: these have to be correct, or the test hangs
+        allow($stdout).to receive(:puts).with('19').and_return(nil)
+        allow($stdout).to receive(:puts).with('58').and_return(nil)
+        allow($stdout).to receive(:puts).with('128').and_return(nil)
+        allow($stdout).to receive(:puts).with('271').and_return(nil)
+        allow($stdout).to receive(:puts).with('552').and_return(nil)
+        allow($stdout).to receive(:puts).with('1123').and_return(nil)
+        allow($stdout).to receive(:puts).with('2266').and_return(nil)
+        allow($stdout).to receive(:puts).with('4544').and_return(nil)
+        allow($stdout).to receive(:puts).with('9103').and_return(nil)
+        allow($stdout).to receive(:puts).with('18216').and_return(nil)
+        expect(amps.run(53)).to eq(18216)
       end
     end
   end

@@ -106,6 +106,7 @@ if $PROGRAM_NAME == __FILE__
               $stdout.print phases.inspect + ':'
               amps = AmplifierCascade.new(program, phases.map(&:to_s), $stdout, feedback)
               amps.run(9)
+              # TODO: replace newlines with ', ' ?
             end
           end
         end
