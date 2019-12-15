@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 ##
-# Advent of Code / 2019 / Day 2+5+7
+# Advent of Code / 2019 / Day 2+5+7+9
 #
 # @author oh2gxn
 
@@ -41,6 +41,9 @@ class IntCode
   # opcode of compare equals
   CEQ = 8
 
+  # opcode of relative base offset
+  RBO = 9
+
   # opcode of halt instruction
   HALT = 99
 
@@ -51,6 +54,7 @@ class IntCode
   # @param err [IO, NilClass] an object with print method for interactive messages
   def initialize(memory_dump, input = STDIN, output = STDOUT, err = STDERR)
     @ram = memory_dump.map(&:to_i)
+    @relative_base = 0 # pointer for relative addressing mode
     @input = input
     @output = output
     @err = err
@@ -95,24 +99,27 @@ class IntCode
   # @raise [ArgumentError] when illegal instruction
   def execute(instruction, pointer)
     opcode, *pmodes = instruction
+    args = get_parameters(pointer, pmodes)
     # TODO: Hash<Integer,Proc> instead of case expression, or Instruction factory etc..?
     case opcode
     when ADD
-      add(pointer, pmodes)
+      add(pointer, args)
     when MUL
-      mul(pointer, pmodes)
+      mul(pointer, args)
     when INP
-      inp(pointer, pmodes)
+      inp(pointer, args)
     when OUT
-      out(pointer, pmodes)
+      out(pointer, args)
     when JIT
-      jit(pointer, pmodes)
+      jit(pointer, args)
     when JIF
-      jif(pointer, pmodes)
+      jif(pointer, args)
     when CLT
-      clt(pointer, pmodes)
+      clt(pointer, args)
     when CEQ
-      ceq(pointer, pmodes)
+      ceq(pointer, args)
+    when RBO
+      rbo(pointer, args)
     when HALT
       pointer + 1
     else
@@ -122,111 +129,113 @@ class IntCode
 
   # execute addition at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameters
   # @return [Integer] new instruction pointer
-  def add(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    arg2 = @ram[pointer + 2]
-    arg2 = @ram[arg2] if pmodes[1].zero?
-    arg3 = @ram[pointer + 3]
-    @ram[arg3] = arg1 + arg2 # TODO: pmodes[2] == 1?
+  def add(pointer, args)
+    @ram[args[2]] = args[0] + args[1] # TODO: pmodes[2] == 1?
     pointer + 4
   end
 
   # execute multiplication at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameters
   # @return [Integer] new instruction pointer
-  def mul(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    arg2 = @ram[pointer + 2]
-    arg2 = @ram[arg2] if pmodes[1].zero?
-    arg3 = @ram[pointer + 3]
-    @ram[arg3] = arg1 * arg2 # TODO: pmodes[2] == 1?
+  def mul(pointer, args)
+    @ram[args[2]] = args[0] * args[1] # TODO: pmodes[2] == 1?
     pointer + 4
   end
 
   # execute input at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] not used
   # @return [Integer] new instruction pointer
-  def inp(pointer, _pmodes)
-    arg1 = @ram[pointer + 1]
+  def inp(pointer, args)
+    arg0 = @ram[pointer + 1] # special case, args not useful
     @err.print PROMPT unless @err.nil?
-    @ram[arg1] = Integer(@input.gets) # TODO: pmodes[0] == 1?
+    @ram[arg0] = Integer(@input.gets)
     pointer + 2
   end
 
   # execute output at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
   # @return [Integer] new instruction pointer
-  def out(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    @output.puts arg1.to_s
+  def out(pointer, args)
+    @output.puts args[0].to_s
     @output.flush
     pointer + 2
   end
 
   # execute jump if true at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
   # @return [Integer] modified instruction pointer!
-  def jit(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    arg2 = @ram[pointer + 2]
-    arg2 = @ram[arg2] if pmodes[1].zero?
-    return arg2 unless arg1.zero?
+  def jit(pointer, args)
+    return args[1] unless args[0].zero?
 
     pointer + 3
   end
 
   # execute jump if false at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
   # @return [Integer] modified instruction pointer!
-  def jif(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    arg2 = @ram[pointer + 2]
-    arg2 = @ram[arg2] if pmodes[1].zero?
-    return arg2 if arg1.zero?
+  def jif(pointer, args)
+    return args[1] if args[0].zero?
 
     pointer + 3
   end
 
   # execute comparison less than at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
   # @return [Integer] new instruction pointer
-  def clt(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    arg2 = @ram[pointer + 2]
-    arg2 = @ram[arg2] if pmodes[1].zero?
-    arg3 = @ram[pointer + 3]
-    @ram[arg3] = arg1 < arg2 ? 1 : 0
+  def clt(pointer, args)
+    @ram[args[2]] = args[0] < args[1] ? 1 : 0
     pointer + 4
   end
 
   # execute comparison equals at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
   # @return [Integer] new instruction pointer
-  def ceq(pointer, pmodes)
-    arg1 = @ram[pointer + 1]
-    arg1 = @ram[arg1] if pmodes[0].zero?
-    arg2 = @ram[pointer + 2]
-    arg2 = @ram[arg2] if pmodes[1].zero?
-    arg3 = @ram[pointer + 3]
-    @ram[arg3] = arg1 == arg2 ? 1 : 0
+  def ceq(pointer, args)
+    @ram[args[2]] = args[0] == args[1] ? 1 : 0
     pointer + 4
   end
 
+  # accumulate relative base
+  # @param pointer [Integer] instruction pointer
+  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @return [Integer] new instruction pointer
+  def rbo(pointer, args)
+    @relative_base += args[0] # TODO: guard against negative values?
+    pointer + 2
+  end
+
+  # fetches proper instruction parameters according to parameter modes
+  # @param pointer [Integer] instruction pointer
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  def get_parameters(pointer, pmodes)
+    pmodes.map.with_index do |pmode, i|
+      immediate = @ram[pointer + 1 + i]
+      if i < 2 # input arguments
+        case pmode
+        when 0
+          @ram[immediate] # position mode
+        when 1
+          immediate # immediate mode
+        when 2
+          @ram[@relative_base + immediate] # relative mode
+        else
+          raise(ArgumentError, "Illegal parameter mode #{pmode} at #{pointer}")
+        end
+      else
+        immediate # output address
+      end
+    end
+  end
+  
 end
 
 # "" -> nil

@@ -265,4 +265,33 @@ RSpec.describe IntCode do
       end
     end
   end
+
+  context 'with the first relative mode example' do
+    let :memory_dump { [109,1,
+                        204,-1,
+                        1001,100,1,100,
+                        1008,100,16,101,
+                        1006,101,
+                        0,99] }
+    xit 'returns writes itself to output' do
+      allow($stdout).to receive(:puts).with('109') # FIXME: crashes after this
+      #allow($stdout).to receive(:puts).with('1')
+      #allow($stdout).to receive(:puts).with('204')
+      #allow($stdout).to receive(:puts).with('-1')
+      #allow($stdout).to receive(:puts).with('1001')
+      #allow($stdout).to receive(:puts).with('100')
+      #allow($stdout).to receive(:puts).with('1')
+      #allow($stdout).to receive(:puts).with('100')
+      #allow($stdout).to receive(:puts).with('1008')
+      #allow($stdout).to receive(:puts).with('100')
+      #allow($stdout).to receive(:puts).with('16')
+      #allow($stdout).to receive(:puts).with('101')
+      #allow($stdout).to receive(:puts).with('1006')
+      #allow($stdout).to receive(:puts).with('101')
+      #allow($stdout).to receive(:puts).with('0')
+      #allow($stdout).to receive(:puts).with('99')
+      expect(subject.run(0)).to eq(109)
+    end
+  end
+
 end  
