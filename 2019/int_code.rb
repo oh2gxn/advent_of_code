@@ -47,6 +47,20 @@ class IntCode
   # opcode of halt instruction
   HALT = 99
 
+  # opcode => instruction mapping
+  INSTRUCTIONS = {
+    ADD => :add,
+    MUL => :mul,
+    INP => :inp,
+    OUT => :out,
+    JIT => :jit,
+    JIF => :jif,
+    CLT => :clt,
+    CEQ => :ceq,
+    RBO => :rbo,
+    HALT => :halt
+  }.freeze
+
   # Constructor
   # @param memory_dump [Array<Integer>] contents of RAM
   # @param input [IO] an object with gets method
@@ -100,31 +114,9 @@ class IntCode
   def execute(instruction, pointer)
     opcode, *pmodes = instruction
     args = get_parameters(pointer, pmodes)
-    # TODO: Hash<Integer,Proc> instead of case expression, or Instruction factory etc..?
-    case opcode
-    when ADD
-      add(pointer, args)
-    when MUL
-      mul(pointer, args)
-    when INP
-      inp(pointer, args)
-    when OUT
-      out(pointer, args)
-    when JIT
-      jit(pointer, args)
-    when JIF
-      jif(pointer, args)
-    when CLT
-      clt(pointer, args)
-    when CEQ
-      ceq(pointer, args)
-    when RBO
-      rbo(pointer, args)
-    when HALT
-      pointer + 1
-    else
-      raise(ArgumentError, "Illegal instruction #{opcode} at #{pointer}")
-    end
+    raise(ArgumentError, "Illegal instruction #{opcode} at #{pointer}") unless INSTRUCTIONS.key? opcode
+
+    send(INSTRUCTIONS[opcode], pointer, args)
   end
 
   # execute addition at a memory location
@@ -149,9 +141,10 @@ class IntCode
   # @param pointer [Integer] instruction pointer
   # @param args [Array<Integer>] not used
   # @return [Integer] new instruction pointer
-  def inp(pointer, args)
+  def inp(pointer, _args)
+    # FIXME: relative mode not supported here!
     arg0 = @ram[pointer + 1] # special case, args not useful
-    @err.print PROMPT unless @err.nil?
+    @err&.print PROMPT
     @ram[arg0] = Integer(@input.gets)
     pointer + 2
   end
@@ -213,20 +206,32 @@ class IntCode
     pointer + 2
   end
 
+  # just updates pointer, not meant to do anything
+  # @param pointer [Integer] instruction pointer
+  # @return [Integer] pointer+1
+  def halt(pointer, _args)
+    pointer + 1
+  end
+
   # fetches proper instruction parameters according to parameter modes
   # @param pointer [Integer] instruction pointer
   # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate
   def get_parameters(pointer, pmodes)
     pmodes.map.with_index do |pmode, i|
-      immediate = @ram[pointer + 1 + i]
+      immediate = @ram[pointer + 1 + i].to_i # assumes @ram[*] = 0
       if i < 2 # input arguments
         case pmode
-        when 0
-          @ram[immediate] # position mode
-        when 1
-          immediate # immediate mode
-        when 2
-          @ram[@relative_base + immediate] # relative mode
+        when 0 # position mode
+          raise(ArgumentError, "Illegal absolute address #{immediate} at #{pointer}") if immediate.negative?
+
+          @ram[immediate].to_i
+        when 1 # immediate mode
+          immediate
+        when 2 # relative mode
+          immediate += @relative_base
+          raise(ArgumentError, "Illegal relative address #{immediate} at #{pointer}") if immediate.negative?
+
+          @ram[immediate].to_i
         else
           raise(ArgumentError, "Illegal parameter mode #{pmode} at #{pointer}")
         end
@@ -235,7 +240,7 @@ class IntCode
       end
     end
   end
-  
+
 end
 
 # "" -> nil

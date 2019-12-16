@@ -273,24 +273,40 @@ RSpec.describe IntCode do
                         1008,100,16,101,
                         1006,101,
                         0,99] }
-    xit 'returns writes itself to output' do
-      allow($stdout).to receive(:puts).with('109') # FIXME: crashes after this
-      #allow($stdout).to receive(:puts).with('1')
-      #allow($stdout).to receive(:puts).with('204')
-      #allow($stdout).to receive(:puts).with('-1')
-      #allow($stdout).to receive(:puts).with('1001')
-      #allow($stdout).to receive(:puts).with('100')
-      #allow($stdout).to receive(:puts).with('1')
-      #allow($stdout).to receive(:puts).with('100')
-      #allow($stdout).to receive(:puts).with('1008')
-      #allow($stdout).to receive(:puts).with('100')
-      #allow($stdout).to receive(:puts).with('16')
-      #allow($stdout).to receive(:puts).with('101')
-      #allow($stdout).to receive(:puts).with('1006')
-      #allow($stdout).to receive(:puts).with('101')
-      #allow($stdout).to receive(:puts).with('0')
-      #allow($stdout).to receive(:puts).with('99')
+    it 'returns writes itself to output' do
+      allow($stdout).to receive(:puts).with('109')
+      allow($stdout).to receive(:puts).with('1')
+      allow($stdout).to receive(:puts).with('204')
+      allow($stdout).to receive(:puts).with('-1')
+      allow($stdout).to receive(:puts).with('1001')
+      allow($stdout).to receive(:puts).with('100')
+      allow($stdout).to receive(:puts).with('1')
+      allow($stdout).to receive(:puts).with('100')
+      allow($stdout).to receive(:puts).with('1008')
+      allow($stdout).to receive(:puts).with('100')
+      allow($stdout).to receive(:puts).with('16')
+      allow($stdout).to receive(:puts).with('101')
+      allow($stdout).to receive(:puts).with('1006')
+      allow($stdout).to receive(:puts).with('101')
+      allow($stdout).to receive(:puts).with('0')
+      allow($stdout).to receive(:puts).with('99')
       expect(subject.run(0)).to eq(109)
+    end
+  end
+
+  context 'with the big numbers example' do
+    let :memory_dump { [1102, 34915192, 34915192, 7, 4, 7, 99, 0] }
+    it 'outputs a 16 digit number' do
+      allow($stdout).to receive(:puts).with('1219070632396864')
+      expect(subject.run(7)).to eq(1219070632396864)
+    end
+  end
+
+  context 'with another big numbers example' do
+    let :memory_dump { [104, 1125899906842624, 99] }
+    it 'outputs the number' do
+      allow($stdout).to receive(:puts).with('1125899906842624')
+      expect(subject.run(1)).to eq(1125899906842624)
     end
   end
 

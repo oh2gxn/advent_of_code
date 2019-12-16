@@ -57,3 +57,32 @@ Once your Intcode computer is fully functional, the BOOST program should report 
 opcodes when run in test mode; it should only output a single value, the BOOST keycode. What BOOST
 keycode does it produce?
 
+file:day_9_input.csv
+
+file:int_code.rb
+file:spec/int_code_spec.rb
+
+: bundle exec rspec
+..............................................................................
+
+Finished in 0.34546 seconds (files took 0.18867 seconds to load)
+78 examples, 0 failures
+
+: bundle exec ruby int_code.rb day_9_input.csv 
+TEST>1
+203
+0
+34463338.34463338 => 1
+
+So, I input "1", and it output the Boost code "203"
+
+"your answer is too low"
+
+That's right, it actually output "203" as incorrect parameter mode & opcode.
+Which means "relative mode input" is wrong, and not covered by specs either.
+Have some more:
+file:spec/int_code_spec.rb
+
+
+
+
