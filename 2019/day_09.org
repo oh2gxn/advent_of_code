@@ -57,7 +57,7 @@ Once your Intcode computer is fully functional, the BOOST program should report 
 opcodes when run in test mode; it should only output a single value, the BOOST keycode. What BOOST
 keycode does it produce?
 
-file:day_9_input.csv
+file:day_09_input.csv
 
 file:int_code.rb
 file:spec/int_code_spec.rb
@@ -68,7 +68,7 @@ file:spec/int_code_spec.rb
 Finished in 0.34546 seconds (files took 0.18867 seconds to load)
 78 examples, 0 failures
 
-: bundle exec ruby int_code.rb day_9_input.csv 
+: bundle exec ruby int_code.rb day_09_input.csv 
 TEST>1
 203
 0
@@ -90,7 +90,7 @@ After some hacking, more or less ugly:
 Finished in 0.32812 seconds (files took 0.20489 seconds to load)
 79 examples, 0 failures
 
-: bundle exec ruby int_code.rb day_9_input.csv 
+: bundle exec ruby int_code.rb day_09_input.csv 
 TEST>1
 21101
 21107
@@ -106,7 +106,7 @@ int_code.rb:121:in `execute': Illegal instruction 0 at 1 (ArgumentError)
 	from /Users/janne/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/csv.rb:1147:in `foreach'
 	from int_code.rb:315:in `<main>'
 
-It seems I'll need to cover the same stuff in RSpec as covered by day_9_input.csv.
+It seems I'll need to cover the same stuff in RSpec as covered by day_09_input.csv.
 Issues were already anticipated by comments like 
 # TODO: pmodes[2] == 1?
 # TODO: pmodes[2] > 0?
@@ -117,7 +117,7 @@ Refactoring parameter handling to include relative modes:
 
 Finished in 0.33563 seconds (files took 0.18998 seconds to load)
 79 examples, 0 failures
-: bundle exec ruby int_code.rb day_9_input.csv 
+: bundle exec ruby int_code.rb day_09_input.csv 
 TEST>1
 3638931938
 34463338.34463338 => 1102
@@ -140,7 +140,7 @@ output a single value: the coordinates of the distress signal.
 Run the BOOST program in sensor boost mode. What are the coordinates
 of the distress signal?
 
-: bundle exec ruby int_code.rb day_9_input.csv
+: bundle exec ruby int_code.rb day_09_input.csv
 TEST>2
 86025
 34463338.34463338 => 1102

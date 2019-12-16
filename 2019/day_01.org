@@ -28,10 +28,10 @@ values.
 
 What is the sum of the fuel requirements for all of the modules on your spacecraft?
 
-file:day_1_input.csv
+file:day_01_input.csv
 file:fuel_counter_upper.rb
 
-: ./fuel_counter_upper.rb day_1_input.csv
+: ./fuel_counter_upper.rb day_01_input.csv
 3345909.0
 
 * Part Two
@@ -64,12 +64,12 @@ separately, then add them all up at the end.)
 
 file:fuel_counter_upper.rb
 
-: ./fuel_counter_upper.rb day_1_input.csv
+: ./fuel_counter_upper.rb day_01_input.csv
 5015983.0
 
 EDIT: using rbenv and bundler
 file:.ruby-version
 file:.ruby-gemset
 file:Gemfile
-: rbenv exec ruby fuel_counter_upper.rb day_1_input.csv
+: rbenv exec ruby fuel_counter_upper.rb day_01_input.csv
 5015983.0

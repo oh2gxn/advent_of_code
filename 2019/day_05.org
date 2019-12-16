@@ -80,11 +80,13 @@ except the diagnostic code, the diagnostic program ran successfully.
 After providing 1 to the only input instruction and passing all the tests, what diagnostic code does
 the program produce?
 
+file:day_05_input.csv
+
 file:int_code.rb <- seem like backwards compatible changes for day 2?
 file:spec/int_code_spec.rb
 
 Running the first time:
-: rbenv exec ruby int_code.rb day_5_input.csv
+: rbenv exec ruby int_code.rb day_05_input.csv
 TEST>1
 0
 0
@@ -155,7 +157,7 @@ only outputs one number, the diagnostic code.
 
 What is the diagnostic code for system ID 5?
 
-: rbenv exec ruby int_code.rb day_5_input.csv
+: rbenv exec ruby int_code.rb day_05_input.csv
 TEST>5
 9168267
 225.1 => 314

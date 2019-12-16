@@ -68,15 +68,15 @@ puzzle input) to the "1202 program alarm" state it had just before the last comp
 do this, before running the program, replace position 1 with the value 12 and replace position 2
 with the value 2. What value is left at position 0 after the program halts?
 
-file:day_2_input.csv
+file:day_02_input.csv
 
 file:int_code.rb
 file:spec/int_code_spec.rb
 
-: rbenv exec ruby int_code.rb day_2_input.csv
+: rbenv exec ruby int_code.rb day_02_input.csv
 509871
 
-: rbenv exec ruby int_code.rb day_2_input_mod.csv
+: rbenv exec ruby int_code.rb day_02_input_mod.csv
 6730673
 
 * Part Two
@@ -120,22 +120,22 @@ Find the input noun and verb that cause the program to produce the output 196907
 noun + verb? (For example, if noun=12 and verb=2, the answer would be 1202.)
 
 file:int_code.rb
-: rbenv exec ruby int_code.rb day_2_input.csv 12 2
+: rbenv exec ruby int_code.rb day_02_input.csv 12 2
 6730673
 
-: rbenv exec ruby int_code.rb day_2_input.csv | grep 19690720
+: rbenv exec ruby int_code.rb day_02_input.csv | grep 19690720
 37.49 => 19690720
 
 After some tweaking:
-: rbenv exec ruby int_code.rb day_2_input.csv 12 2
+: rbenv exec ruby int_code.rb day_02_input.csv 12 2
 12.2 => 6730673
-: rbenv exec ruby int_code.rb day_2_input.csv 0:99 0:99 | grep 19690720
+: rbenv exec ruby int_code.rb day_02_input.csv 0:99 0:99 | grep 19690720
 37.49 => 19690720
 
 Some more tweaking for day 5:
-: rbenv exec ruby int_code.rb day_2_input.csv
+: rbenv exec ruby int_code.rb day_02_input.csv
 0.0 => 509871
-: rbenv exec ruby int_code.rb day_2_input.csv 12 2
+: rbenv exec ruby int_code.rb day_02_input.csv 12 2
 12.2 => 6730673
-: rbenv exec ruby int_code.rb day_2_input.csv 0:99 0:99 | grep 19690720
+: rbenv exec ruby int_code.rb day_02_input.csv 0:99 0:99 | grep 19690720
 37.49 => 19690720

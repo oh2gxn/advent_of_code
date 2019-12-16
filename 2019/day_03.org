@@ -53,6 +53,8 @@ Here are a few more examples:
 
 What is the Manhattan distance from the central port to the closest intersection?
 
+file:day_03_input.csv
+
 file:crossed_wire.rb
 file:spec/crossed_wire_spec.rb
 
@@ -84,14 +86,14 @@ Bundle complete! 2 Gemfile dependencies, 15 gems now installed.
 Finished in 0.00458 seconds (files took 0.11848 seconds to load)
 8 examples, 0 failures
 
-: bundle exec ruby crossed_wire.rb day_3_input.csv 
+: bundle exec ruby crossed_wire.rb day_03_input.csv 
 [[225, 0], [538, 16], [538, 24], [-628, 2], [347, 347], [80, 627], [721, 16], [721, 24], [80, 694], [-571, 268], [538, 318], [-571, 326], [938, 16], [638, 318], [789, 192], [-102, 883], [-478, 514], [938, 77], [1009, 16], [835, 192], [721, 318], [638, 435], [789, 286], [835, 286], [789, 370], [638, 540], [835, 370], [963, 286], [835, 591], [1010, 435], [1138, 370], [1138, 384], [-1397, -218], [-1545, -161], [1426, 302], [1010, 804], [-1610, 247], [1139, 804], [1141, 804], [1672, 342], [1321, 804], [1672, 804], [-2229, 932], [-2738, 975], [-2738, 1295], [-2383, 1665]]
 
 So, the answer is (225+0)=225, although the naive solution spent
 enormous amount of time computing it.
 
 After adding a break in the inner loop:
-: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_3_input.csv 
+: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_03_input.csv 
 L1:[[225, 0], [538, 16], [538, 24], [-628, 2], [347, 347], [80, 627], [721, 16], [721, 24], [80, 694], [-571, 268], [538, 318], [-571, 326], [938, 16], [638, 318], [789, 192], [-102, 883], [-478, 514], [938, 77], [1009, 16], [835, 192], [721, 318], [638, 435], [789, 286], [835, 286], [789, 370], [638, 540], [835, 370], [963, 286], [835, 591], [1010, 435], [1138, 370], [1138, 384], [-1397, -218], [-1545, -161], [1426, 302], [1010, 804], [-1610, 247], [1139, 804], [1141, 804], [1672, 342], [1321, 804], [1672, 804], [-2229, 932], [-2738, 975], [-2738, 1295], [-2383, 1665]]
 
      1543.71 real      1507.72 user         3.61 sys
@@ -158,7 +160,7 @@ intersection?
 file:crossed_wire.rb
 file:spec/crossed_wire_spec.rb
 
-: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_3_input.csv 
+: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_03_input.csv 
 L1:[{:cost=>225, :point=>[225, 0]}, {:cost=>554, :point=>[538, 16]}, {:cost=>562, :point=>[538, 24]}, {:cost=>630, :point=>[-628, 2]}, {:cost=>694, :point=>[347, 347]}, {:cost=>707, :point=>[80, 627]}, {:cost=>737, :point=>[721, 16]}, {:cost=>745, :point=>[721, 24]}, {:cost=>774, :point=>[80, 694]}, {:cost=>839, :point=>[-571, 268]}, {:cost=>856, :point=>[538, 318]}, {:cost=>897, :point=>[-571, 326]}, {:cost=>954, :point=>[938, 16]}, {:cost=>956, :point=>[638, 318]}, {:cost=>981, :point=>[789, 192]}, {:cost=>985, :point=>[-102, 883]}, {:cost=>992, :point=>[-478, 514]}, {:cost=>1015, :point=>[938, 77]}, {:cost=>1025, :point=>[1009, 16]}, {:cost=>1027, :point=>[835, 192]}, {:cost=>1039, :point=>[721, 318]}, {:cost=>1073, :point=>[638, 435]}, {:cost=>1075, :point=>[789, 286]}, {:cost=>1121, :point=>[835, 286]}, {:cost=>1159, :point=>[789, 370]}, {:cost=>1178, :point=>[638, 540]}, {:cost=>1205, :point=>[835, 370]}, {:cost=>1249, :point=>[963, 286]}, {:cost=>1426, :point=>[835, 591]}, {:cost=>1445, :point=>[1010, 435]}, {:cost=>1508, :point=>[1138, 370]}, {:cost=>1522, :point=>[1138, 384]}, {:cost=>1615, :point=>[-1397, -218]}, {:cost=>1706, :point=>[-1545, -161]}, {:cost=>1728, :point=>[1426, 302]}, {:cost=>1814, :point=>[1010, 804]}, {:cost=>1857, :point=>[-1610, 247]}, {:cost=>1943, :point=>[1139, 804]}, {:cost=>1945, :point=>[1141, 804]}, {:cost=>2014, :point=>[1672, 342]}, {:cost=>2125, :point=>[1321, 804]}, {:cost=>2476, :point=>[1672, 804]}, {:cost=>3161, :point=>[-2229, 932]}, {:cost=>3713, :point=>[-2738, 975]}, {:cost=>4033, :point=>[-2738, 1295]}, {:cost=>4048, :point=>[-2383, 1665]}]
 L8:[{:cost=>35195, :point=>[789, 286]}, 
     {:cost=>36005, :point=>[638, 540]}, 
@@ -267,7 +269,7 @@ Legendary off-by-one bug:
 Finished in 0.25278 seconds (files took 0.12558 seconds to load)
 26 examples, 0 failures
 
-: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_3_input.csv
+: /usr/bin/time -l bundle exec ruby crossed_wire.rb day_03_input.csv
 L1:[{:cost=>225, :point=>[225, 0]},
     {:cost=>554, :point=>[538, 16]},
     {:cost=>562, :point=>[538, 24]},
