@@ -310,4 +310,18 @@ RSpec.describe IntCode do
     end
   end
 
+  context 'with relative mode input example' do
+    let :memory_dump { [109,7,203,0,204,0,99,666] }
+
+    context 'given 42 as input' do
+      before { allow($stdin).to receive(:gets).and_return('42') }
+
+      it 'outputs 42' do
+        allow($stderr).to receive(:print).with(described_class::PROMPT)
+        allow($stdout).to receive(:puts).with('42')
+        expect(subject.run(7)).to eq(42)
+      end
+    end
+  end
+
 end  

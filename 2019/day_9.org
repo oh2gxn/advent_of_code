@@ -83,6 +83,45 @@ Which means "relative mode input" is wrong, and not covered by specs either.
 Have some more:
 file:spec/int_code_spec.rb
 
+After some hacking, more or less ugly:
+: bundle exec rspec
+...............................................................................
 
+Finished in 0.32812 seconds (files took 0.20489 seconds to load)
+79 examples, 0 failures
+
+: bundle exec ruby int_code.rb day_9_input.csv 
+TEST>1
+21101
+21107
+21108
+21102
+int_code.rb:121:in `execute': Illegal instruction 0 at 1 (ArgumentError)
+	from int_code.rb:87:in `run'
+	from int_code.rb:280:in `run_program'
+	from int_code.rb:315:in `block in <main>'
+	from /Users/janne/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/csv.rb:1771:in `each'
+	from /Users/janne/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/csv.rb:1148:in `block in foreach'
+	from /Users/janne/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/csv.rb:1299:in `open'
+	from /Users/janne/.rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/csv.rb:1147:in `foreach'
+	from int_code.rb:315:in `<main>'
+
+It seems I'll need to cover the same stuff in RSpec as covered by day_9_input.csv.
+Issues were already anticipated by comments like 
+# TODO: pmodes[2] == 1?
+# TODO: pmodes[2] > 0?
+
+Refactoring parameter handling to include relative modes:
+: bundle exec rspec
+...............................................................................
+
+Finished in 0.33563 seconds (files took 0.18998 seconds to load)
+79 examples, 0 failures
+: bundle exec ruby int_code.rb day_9_input.csv 
+TEST>1
+3638931938
+34463338.34463338 => 1102
+
+3638931938 was the correct answer!
 
 

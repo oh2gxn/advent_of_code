@@ -98,11 +98,16 @@ class IntCode
   # @param integer [Integer] an instruction
   # @return [Array] opcode and parameter modes
   def parse_instruction(integer)
-    # TODO: Instruction class?
-    [integer % 100,
-     (integer % 1000) / 100,
-     (integer % 10_000) / 1000,
-     (integer % 100_000) / 10_000]
+    # TODO: Instruction classes? INP as "less special case", and JIT/JIF?
+    opcode = integer % 100
+    if [INP].include? opcode
+      [opcode, (integer % 1000) / 100]
+    else
+      [opcode,
+       (integer % 1000) / 100,
+       (integer % 10_000) / 1000,
+       (integer % 100_000) / 10_000]
+    end
   end
 
   ##
@@ -113,47 +118,48 @@ class IntCode
   # @raise [ArgumentError] when illegal instruction
   def execute(instruction, pointer)
     opcode, *pmodes = instruction
-    args = get_parameters(pointer, pmodes)
     raise(ArgumentError, "Illegal instruction #{opcode} at #{pointer}") unless INSTRUCTIONS.key? opcode
 
-    send(INSTRUCTIONS[opcode], pointer, args)
+    send(INSTRUCTIONS[opcode], pointer, pmodes)
   end
 
   # execute addition at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameters
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] new instruction pointer
-  def add(pointer, args)
-    @ram[args[2]] = args[0] + args[1] # TODO: pmodes[2] == 1?
+  def add(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
+    @ram[args[2]] = args[0] + args[1]
     pointer + 4
   end
 
   # execute multiplication at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameters
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] new instruction pointer
-  def mul(pointer, args)
-    @ram[args[2]] = args[0] * args[1] # TODO: pmodes[2] == 1?
+  def mul(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
+    @ram[args[2]] = args[0] * args[1]
     pointer + 4
   end
 
   # execute input at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] not used
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 2=relative
   # @return [Integer] new instruction pointer
-  def inp(pointer, _args)
-    # FIXME: relative mode not supported here!
-    arg0 = @ram[pointer + 1] # special case, args not useful
+  def inp(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     @err&.print PROMPT
-    @ram[arg0] = Integer(@input.gets)
+    @ram[args[0]] = Integer(@input.gets) # NOTE: INP is a special case in terms of output
     pointer + 2
   end
 
   # execute output at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param pmodes [Array<Integer>] parameter modes, 0=pointer, 1=immediate, 2=relative
   # @return [Integer] new instruction pointer
-  def out(pointer, args)
+  def out(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     @output.puts args[0].to_s
     @output.flush
     pointer + 2
@@ -161,9 +167,10 @@ class IntCode
 
   # execute jump if true at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] modified instruction pointer!
-  def jit(pointer, args)
+  def jit(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     return args[1] unless args[0].zero?
 
     pointer + 3
@@ -171,9 +178,10 @@ class IntCode
 
   # execute jump if false at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] modified instruction pointer!
-  def jif(pointer, args)
+  def jif(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     return args[1] if args[0].zero?
 
     pointer + 3
@@ -181,27 +189,30 @@ class IntCode
 
   # execute comparison less than at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] new instruction pointer
-  def clt(pointer, args)
+  def clt(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     @ram[args[2]] = args[0] < args[1] ? 1 : 0
     pointer + 4
   end
 
   # execute comparison equals at a memory location
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] new instruction pointer
-  def ceq(pointer, args)
+  def ceq(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     @ram[args[2]] = args[0] == args[1] ? 1 : 0
     pointer + 4
   end
 
   # accumulate relative base
   # @param pointer [Integer] instruction pointer
-  # @param args [Array<Integer>] parameter modes, 0=pointer, 1=immediate
+  # @param pmodes [Array<Integer>] parameter modes
   # @return [Integer] new instruction pointer
-  def rbo(pointer, args)
+  def rbo(pointer, pmodes)
+    args = get_parameters(pointer, pmodes)
     @relative_base += args[0] # TODO: guard against negative values?
     pointer + 2
   end
@@ -209,7 +220,8 @@ class IntCode
   # just updates pointer, not meant to do anything
   # @param pointer [Integer] instruction pointer
   # @return [Integer] pointer+1
-  def halt(pointer, _args)
+  def halt(pointer, _pmodes)
+    # another special case
     pointer + 1
   end
 
@@ -219,7 +231,7 @@ class IntCode
   def get_parameters(pointer, pmodes)
     pmodes.map.with_index do |pmode, i|
       immediate = @ram[pointer + 1 + i].to_i # assumes @ram[*] = 0
-      if i < 2 # input arguments
+      if i+1 < pmodes.length # input arguments
         case pmode
         when 0 # position mode
           raise(ArgumentError, "Illegal absolute address #{immediate} at #{pointer}") if immediate.negative?
@@ -235,8 +247,15 @@ class IntCode
         else
           raise(ArgumentError, "Illegal parameter mode #{pmode} at #{pointer}")
         end
-      else
-        immediate # output address
+      else # output address
+        case pmode
+        when 0 # position mode
+          immediate
+        when 2 # relative mode
+          immediate + @relative_base
+        else
+          raise(ArgumentError, "Illegal parameter mode #{pmode} at #{pointer}")
+        end
       end
     end
   end
