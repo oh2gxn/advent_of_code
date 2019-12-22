@@ -265,5 +265,34 @@ The Elves are placing bets on which will be the 200th asteroid to be vaporized. 
 determining which asteroid that will be; what do you get if you multiply its X coordinate by 100 and
 then add its Y coordinate? (For example, 8,2 becomes 802.)
 
-TODO:
+Hack some more:
 file:monitoring_station.rb
+
+: rbenv exec rspec spec/asteroid_map_spec.rb
+......................
+
+Finished in 0.72752 seconds (files took 0.09141 seconds to load)
+22 examples, 0 failures
+
+: rbenv exec ruby monitoring_station.rb day_10_input.xpm 
+{:count=>299, :coordinates=>[26, 29]}
+1:[26, 26]
+2:[27, 7]
+3:[27, 8]
+4:[27, 10]
+5:[27, 12]
+6:[28, 7]
+7:[28, 11]
+8:[29, 7]
+9:[29, 8]
+10:[30, 3]
+...
+199:[9, 15]
+200:[14, 19]
+201:[0, 7]
+...
+345:[1, 29]
+346:[26, 5]
+347:[26, 0]
+
+100*14 + 19 = 1419, which is correct.
