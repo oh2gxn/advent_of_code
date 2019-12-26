@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 # frozen_string_literal: true
 
 ##
@@ -15,12 +16,14 @@ class HullPaintingRobot
   ##
   # Set up a Hull Painting Robot
   # @param program [Array<Integer>] IntCode program executed by the robot
-  def initialize(program)
+  # @param start_panel_color [Integer] color of the 1st panel
+  def initialize(program, start_panel_color = nil)
     # Hull paint (nil = original black), current position and direction
     @hull_size = [5, 5]
     @hull = Array.new(@hull_size[0]) { Array.new(@hull_size[1]) }
     @row = 2
     @col = 2
+    @hull[@row][@col] = start_panel_color # the 1st reading
     @row_diff = -1 # up
     @col_diff = 0
 
@@ -49,10 +52,13 @@ class HullPaintingRobot
     str = StringIO.new
     @hull.each do |row|
       line = row.map do |panel|
-        if panel.nil?
-          '.'
+        case panel
+        when 0
+          ' '
+        when 1
+          '█'
         else
-          panel.to_i
+          '░'
         end
       end
       str.write(line.join + "\n")
@@ -194,7 +200,15 @@ if $PROGRAM_NAME == __FILE__
   end
 
   program = CSV.read(ARGV[0]).first
+
+  # part 1
   hpr = HullPaintingRobot.new(program)
+  hpr.run(0)
+  $stdout.puts hpr.to_s
+  $stdout.puts "painted #{hpr.count_painted_panels} panels"
+
+  # part 2
+  hpr = HullPaintingRobot.new(program, 1)
   hpr.run(0)
   $stdout.puts hpr.to_s
   $stdout.puts "painted #{hpr.count_painted_panels} panels"
