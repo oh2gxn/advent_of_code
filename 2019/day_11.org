@@ -84,4 +84,10 @@ but that panel is still only counted once; it also never painted the panel it en
 Build a new emergency hull painting robot and run the Intcode program on it. How many panels does it
 paint at least once?
 
-TODO: take some ideas from file:amplification.rb and create file:painter.rb
+file:day_11_input.csv
+
+Hackety hack:
+file:hull_painter.rb
+file:spec/hull_painting_robot_spec.rb
+
+: time rbenv exec ruby hull_painter.rb day_11_input.csv

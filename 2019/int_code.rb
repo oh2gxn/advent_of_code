@@ -88,6 +88,7 @@ class IntCode
       instruction = parse_instruction(@ram[instruction_pointer])
       Thread.pass # yield to other potential emulations here
     end
+    # @output.close # allows other threads to quit waiting for more
     @ram[pointer]
   end
 
