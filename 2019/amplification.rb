@@ -70,9 +70,10 @@ class AmplifierCascade
     @amps.each do |amp|
       threads << Thread.new { amp.run(ptr) }
     end
-    threads.each { |th| th.join }
+    threads.each(&:join)
     threads.last&.value
   end
+
 end
 
 if $PROGRAM_NAME == __FILE__
@@ -96,12 +97,16 @@ if $PROGRAM_NAME == __FILE__
     range.each do |p0|
       range.each do |p1|
         next if p0 == p1
+
         range.each do |p2|
           next if p0 == p2 || p1 == p2
+
           range.each do |p3|
             next if p0 == p3 || p1 == p3 || p2 == p3
+
             range.each do |p4|
               next if p0 == p4 || p1 == p4 || p2 == p4 || p3 == p4 # hack
+
               phases = [p0, p1, p2, p3, p4]
               $stdout.print phases.inspect + ':'
               amps = AmplifierCascade.new(program, phases.map(&:to_s), $stdout, feedback)

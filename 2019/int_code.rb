@@ -232,7 +232,7 @@ class IntCode
   def get_parameters(pointer, pmodes)
     pmodes.map.with_index do |pmode, i|
       immediate = @ram[pointer + 1 + i].to_i # assumes @ram[*] = 0
-      if i+1 < pmodes.length # input arguments
+      if i + 1 < pmodes.length # input arguments
         case pmode
         when 0 # position mode
           raise(ArgumentError, "Illegal absolute address #{immediate} at #{pointer}") if immediate.negative?
