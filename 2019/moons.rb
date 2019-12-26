@@ -17,6 +17,9 @@ class Moon
   # Array of [x,y,z] coordinates
   attr_accessor :position
 
+  # Array of [x,y,z] velocities
+  attr_accessor :velocity
+
   # Puts a moon on the sky at given position, with 0 velocity
   def initialize(position)
     @position = DIMS.values.map { |dim| position[dim].to_f }
@@ -59,7 +62,6 @@ class Moon
   end
 
   # Execute one time step of simulation for a collection of Moons
-  # @return [Float] total energy
   def self.step(moons)
     # apply gravity
     moons.each.with_index do |moon1, i|
@@ -71,12 +73,22 @@ class Moon
     end
 
     # apply velocity
+    moons.each do |moon|
+      moon.update_position
+    end
+  end
+
+  # State of the simulation, as a String
+  def self.hash(moons)
     total_energy = 0
+    vec = []
     moons.each do |moon|
       moon.update_position
       total_energy += moon.total_energy
+      vec += moon.position
+      vec += moon.velocity
     end
-    total_energy
+    total_energy.to_s + ',' + vec.map(&:to_s).join(',')
   end
 
 end
@@ -95,11 +107,16 @@ if $PROGRAM_NAME == __FILE__
   CSV.foreach(initial_positions_file) do |row|
     moons << Moon.new(row)
   end
+
+  history = { Moon.hash(moons) => 0 }
   (1..time_steps).each do |step|
-    te = Moon.step(moons)
-    moons.each do |moon|
-      $stdout.puts step.to_s + ':' + moon.to_s
+    Moon.step(moons)
+    state = Moon.hash(moons)
+    if history[state].nil?
+      history[state] = step
+    else
+      $stdout.puts history[state].to_s + ':' + state
+      $stdout.puts step.to_s + ':' + state
     end
-    $stdout.puts step.to_s + ':' + "total:#{te}"
   end
 end

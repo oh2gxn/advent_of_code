@@ -31,7 +31,12 @@ RSpec.describe Moon do
         te = moons.each_with_object(0.0) { |moon, sum| sum += moon.total_energy }
         expect(te).to eq(0.0)
       end
-    end      
+
+      it 'has a certain total state' do
+        str = described_class.hash(moons)
+        expect(str).to eq('0.0,-1.0,0.0,2.0,0.0,0.0,0.0,2.0,-10.0,-7.0,0.0,0.0,0.0,4.0,-8.0,8.0,0.0,0.0,0.0,3.0,5.0,-1.0,0.0,0.0,0.0')
+      end
+    end
 
     context 'after one step' do
       let :time_steps { 1 }
@@ -84,6 +89,25 @@ RSpec.describe Moon do
         te = 0.0
         moons.each { |moon| te += moon.total_energy }
         expect(te).to eq(179)
+      end
+    end
+
+    context 'after 2772 steps' do
+      let :time_steps { 2772 }
+
+      it 'has the 1st moon at -1, 0, 2 with zero velocity' do
+        expect(moons.first.position).to contain_exactly(-1.0, 0.0, 2.0)
+        expect(moons.first.to_s).to eq('pos=<x=-1.0, y=0.0, z=2.0>, vel=<x=0.0, y=0.0, z=0.0>')
+      end
+
+      it 'has total energy of 0' do
+        te = moons.each_with_object(0.0) { |moon, sum| sum += moon.total_energy }
+        expect(te).to eq(0.0)
+      end
+
+      it 'has the initial total state' do
+        str = described_class.hash(moons)
+        expect(str).to eq('0.0,-1.0,0.0,2.0,0.0,0.0,0.0,2.0,-10.0,-7.0,0.0,0.0,0.0,4.0,-8.0,8.0,0.0,0.0,0.0,3.0,5.0,-1.0,0.0,0.0,0.0')
       end
     end
   end
