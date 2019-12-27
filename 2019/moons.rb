@@ -83,7 +83,6 @@ class Moon
     total_energy = 0
     vec = []
     moons.each do |moon|
-      moon.update_position
       total_energy += moon.total_energy
       vec += moon.position
       vec += moon.velocity

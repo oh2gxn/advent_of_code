@@ -322,4 +322,62 @@ file:day_12_test.csv
 
 This claims that the second example would start repeating at 40 steps << 4686774924 steps.
 
-TODO: Have to improve test coverage or something...
+Had to improve test coverage of Moon.hash:
+: rbenv exec rspec spec/moon_spec.rb
+.......*..................F**
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) Moon with the first example after one step has a certain total state
+     # Temporarily skipped with xit
+     # ./spec/moon_spec.rb:61
+
+  2) Moon with the second example after 4686774924 steps has the 1st moon at -1, 0, 2 with zero velocity
+     # Temporarily skipped with xcontext
+     # ./spec/moon_spec.rb:188
+
+  3) Moon with the second example after 4686774924 steps repeats a previous state
+     # Temporarily skipped with xcontext
+     # ./spec/moon_spec.rb:193
+
+
+Failures:
+
+  1) Moon with the second example after 100 steps has a certain total state
+     Failure/Error: expect(str).to eq('1940.0,8.0,-12.0,-9.0,-7.0,3.0,0.0,13.0,16.0,3.0,3.0,-11.0,-5.0,-29.0,-11.0,-1.0,-3.0,7.0,4.0,16.0,-13.0,23.0,7.0,1.0,1.0')
+
+       expected: "1940.0,8.0,-12.0,-9.0,-7.0,3.0,0.0,13.0,16.0,3.0,3.0,-11.0,-5.0,-29.0,-11.0,-1.0,-3.0,7.0,4.0,16.0,-13.0,23.0,7.0,1.0,1.0"
+            got: "1818.0,1.0,-9.0,-9.0,-7.0,3.0,0.0,16.0,5.0,-8.0,3.0,-11.0,-5.0,-32.0,-4.0,3.0,-3.0,7.0,4.0,23.0,-12.0,24.0,7.0,1.0,1.0"
+
+       (compared using ==)
+     # ./spec/moon_spec.rb:181:in `block (4 levels) in <top (required)>'
+
+Finished in 0.19004 seconds (files took 0.10651 seconds to load)
+29 examples, 1 failure, 3 pending
+
+Failed examples:
+
+rspec ./spec/moon_spec.rb:179 # Moon with the second example after 100 steps has a certain total state
+
+Fixed, but running the naive approach will probably take ages:
+: time rbenv exec ruby moons.rb day_12_test.csv 10000
+
+real    0m0,736s
+user    0m0,472s
+sys     0m0,076s
+
+: time rbenv exec ruby moons.rb day_12_test.csv 1000000
+
+real    0m56,706s
+user    0m56,168s
+sys     0m0,232s
+
+: time rbenv exec ruby moons.rb day_12_test.csv 2000000
+
+real    1m56,660s
+user    1m55,828s
+sys     0m0,460s
+
+This might take at least 3 days:
+: time rbenv exec ruby moons.rb day_12_test.csv 4686774924
+
