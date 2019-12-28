@@ -380,4 +380,24 @@ sys     0m0,460s
 
 This might take at least 3 days:
 : time rbenv exec ruby moons.rb day_12_test.csv 4686774924
+(quit after some 10h and 26 GB)
+^Cmoons.rb:88:in `block in hash': Interrupt
+        from moons.rb:85:in `each'
+        from moons.rb:85:in `hash'
+        from moons.rb:113:in `block in <main>'
+        from moons.rb:111:in `each'
+        from moons.rb:111:in `<main>'
 
+
+real    540m11,413s
+user    421m26,368s
+sys     12m48,020s
+
+: time rbenv exec ruby moons.rb day_12_input.csv 1000000000 | head -n 4
+real    908m44,839s
+user    537m24,668s
+sys     37m30,288s
+
+This probably needs a rigorous mathematical model of the discrete math involved. State transition
+might be possible to be expressed as a transform matrix, but there is a rough non-linearity in the
+gravity calculations.
