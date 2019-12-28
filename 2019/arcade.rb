@@ -13,19 +13,31 @@ require_relative 'int_code'
 # Game Arcade Cabinet
 class Arcade
 
+  # Tile IDs
+  EMPTY = 0
+  WALL = 1
+  BLOCK = 2
+  PADDLE = 3
+  BALL = 4
+
   ##
   # Set up an arcade cabinet
   # @param program [Array<Integer>] IntCode program executed
-  # @todo knowing the screen size in advance would be handy!
   def initialize(program)
     # TODO: use ruby2d gem for actual graphics?
     @screen_size = [1, 1]
     @screen = Array.new(@screen_size[0]) { Array.new(@screen_size[1]) }
+    @score = nil
 
     # IO to the IntCode computer
     @input, @controller_output = IO.pipe
     controller_input, @output = IO.pipe
     @computer = IntCode.new(program, controller_input, @controller_output, nil)
+
+    # cheating
+    @paddle_col = nil
+    @ball_col = nil
+    @joystick_delay = 3 # wait for the ball to come closer at the beginning, HACK
   end
 
   # Run two threads: the contoller and rendering
@@ -33,11 +45,12 @@ class Arcade
   # @param ptr [Integer] address of the IntCode program
   # @return [Integer] final value of the IntCode memory at ptr
   def run(ptr)
+    @output.puts('0') # have the game running, not blocking on input
     controller = Thread.new { @computer.run(ptr) }
     renderer = Thread.new { loop { break if render.nil? } }
     controller.join
     @controller_output.close # TODO: have this at the end of IntCode.run?
-    renderer.join # wait for the last pixel
+    renderer.join # wait for the last tile
     controller.value
   end
 
@@ -47,15 +60,15 @@ class Arcade
     @screen.each do |row|
       line = row.map do |tile_id|
         case tile_id
-        when 0
+        when EMPTY
           ' '
-        when 1
+        when WALL
           '█'
-        when 2
+        when BLOCK
           '░'
-        when 3
+        when PADDLE
           '▓'
-        when 4
+        when BALL
           '◯'
         else
           '.'
@@ -63,11 +76,11 @@ class Arcade
       end
       str.write(line.join + "\n")
     end
-    str.string
+    str.string + "#{@score}\n"
   end
 
   # Count how many tiles have certain content
-  # @param type [Integer] e.g. 2 for block tiles
+  # @param type [Integer] e.g. BLOCK for block tiles
   def count_tiles(type)
     count = 0
     @screen.each do |row|
@@ -80,30 +93,75 @@ class Arcade
     count
   end
 
+  # computer player / cheat mode
+  # @return [Integer] direction of required paddle movement
+  def paddle_direction
+    return 0 if @paddle_col.nil? || @ball_col.nil?
+
+    # wait for the ball to hit the paddle first
+    if @paddle_col == @ball_col
+      @joystick_delay = 0
+      return 0
+    end
+    return 0 if @joystick_delay.positive?
+
+    # time to move
+    @paddle_col < @ball_col ? 1 : -1
+  end
+
   # Read some output from IntCode controller and provide more input
   # @return [Integer, NilClass] current panel color, or nil if quit
   def render
     return nil if @input.eof?
 
-    row = @input.gets.chomp.to_i
+    # graphics
     col = @input.gets.chomp.to_i
+    row = @input.gets.chomp.to_i
     type = @input.gets.chomp.to_i
-    paint(row, col, type)
+    res = paint(row, col, type)
 
-    # TODO: @output.puts('0')
+    if game_started?
+      # wait for the whole screen to render
+      # TODO: frame sync would be useful!
+      sleep 0.01
+      $stdout.print "\033c" # \033c reset terminal
+      $stdout.puts to_s
+
+      # TODO: get input from keyboard instead of paddle_direction()
+      @output.puts(paddle_direction.to_s) if type == BALL # cheat mode
+    end
+
+    res
   end
 
   private
 
+  # guess when the game has started
+  def game_started?
+    !@score.nil? # count_tiles(WALL) >= 45 + 23 + 23
+  end
+
   # paints current panel
   # @return [Integer, NilClass] painted color, or nil if quitting
   def paint(row, col, type)
-    # get a bigger screen?
+    # special instructions used for printing scores
+    if row.negative? || col.negative?
+      @score = type
+      return type
+    end
+
+    # TODO: knowing the screen size 45x24 in advance would be handy!
     append_height(row) if row >= @screen_size[0]
     append_width(col) if col >= @screen_size[1]
 
     case type
-    when 0, 1, 2, 3, 4
+    when EMPTY, WALL, BLOCK
+      @screen[row][col] = type
+    when PADDLE
+      @paddle_col = col # cheat
+      @screen[row][col] = type
+    when BALL
+      @ball_col = col # cheat
       @screen[row][col] = type
     else
       raise(ArgumentError, "Unknown tile type: #{type}")
@@ -133,15 +191,15 @@ end
 if $PROGRAM_NAME == __FILE__
   # CLI for the 13th day
   if ARGV.empty?
-    puts "Usage: #{$PROGRAM_NAME} int_code.csv"
+    puts "Usage: #{$PROGRAM_NAME} int_code.csv [COINS]"
     return 1
   end
 
   program = CSV.read(ARGV[0]).first
+  program[0] = 2 if ARGV.length > 1
 
-  # part 1
   game = Arcade.new(program)
   game.run(0)
-  $stdout.puts game.to_s
-  $stdout.puts "The final screen has #{game.count_tiles(2)} block tiles"
+  $stdout.puts '----'
+  $stdout.puts "The final screen has #{game.count_tiles(Arcade::BLOCK)} block tiles"
 end
