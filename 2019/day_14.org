@@ -133,3 +133,15 @@ Failures:
        expected: 31
             got: 41
 
+Finally:
+: rbenv exec rspec spec/reaction_spec.rb
+...........
+
+Finished in 0.00843 seconds (files took 0.10582 seconds to load)
+11 examples, 0 failures
+
+: rbenv exec ruby stoichiometry.rb day_14_input.txt
+{"ORE"=>443537}
+
+which is correct.
+
