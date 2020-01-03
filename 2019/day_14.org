@@ -145,3 +145,51 @@ Finished in 0.00843 seconds (files took 0.10582 seconds to load)
 
 which is correct.
 
+* Part Two
+
+After collecting ORE for a while, you check your cargo hold: 1 trillion (1000000000000) units of ORE.
+
+With that much ore, given the examples above:
+- The 13312 ORE-per-FUEL example could produce 82892753 FUEL.
+- The 180697 ORE-per-FUEL example could produce 5586022 FUEL.
+- The 2210736 ORE-per-FUEL example could produce 460664 FUEL.
+
+Given 1 trillion ORE, what is the maximum amount of FUEL you can produce?
+
+Sounds like a geometric search:
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 4096000
+{"ORE"=>1407289685259}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2048000
+{"ORE"=>703644856735}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 3000000
+{"ORE"=>1030729745026}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2900000
+{"ORE"=>996372202003}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2950000
+{"ORE"=>1013550891778}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2930000
+{"ORE"=>1006679383501}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2920000
+{"ORE"=>1003243699799}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910000
+{"ORE"=>999807852277}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2911000
+{"ORE"=>1000151512389}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910500
+{"ORE"=>999979695468}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910600
+{"ORE"=>1000013945057}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910550
+{"ORE"=>999996903186}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910555
+{"ORE"=>999998502288}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910556
+{"ORE"=>999998911962}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910558
+{"ORE"=>999999577284}
+: rbenv exec ruby stoichiometry.rb day_14_input.txt 2910559
+{"ORE"=>1000000009476}
+
+Seems like 2910558
+
+which is correct

@@ -142,14 +142,16 @@ end
 if $PROGRAM_NAME == __FILE__
   # CLI for the 14th day
   reactions = {}
-  ARGF.each_line do |line|
+  file_name = ARGV[0]
+  fuel_qty = ARGV[1] || '1'
+  File.open(file_name).each_line do |line|
     r = Reaction.new(line)
     key = r.output.keys.first
     reactions[key] = r
   end
-  # TODO: sort reactions by causality?
+  # sort reactions by causality
   Reaction.find_levels(reactions, 'FUEL', 0)
 
-  required = { 'FUEL' => 1 }
+  required = { 'FUEL' => fuel_qty.to_i }
   puts Reaction.solve(required, reactions).inspect
 end
